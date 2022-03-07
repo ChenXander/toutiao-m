@@ -34,24 +34,42 @@
 </template>
 
 <script>
+import { login } from "@/api/user";
+
 export default {
-  name: 'LoginIndex',
+  name: "LoginIndex",
   components: {},
-  data () {
+  data() {
     return {
       user: {
-        mobile: '', // 手机号
-        code: '' // 验证码
-      }
-    }
+        mobile: "13911111111", // 手机号
+        code: "246810", // 验证码
+      },
+    };
   },
-  created () {},
+  created() {},
   methods: {
-    onSubmit (values) {
-      //   获取表单数据
-    }
-  }
-}
+    async onSubmit() {
+      // 在组件中必须通过this.$toast 来调用Toast组件
+      this.$toast.loading({
+        message: "登录中...",
+        forbidClick: true, // 禁用背景点击
+        duration: 0, // 持续时间，默认值2000，设置0持续显示
+      });
+
+      //   提交表单请求登录数据
+      try {
+        // const {data} = await login(this.user);
+        this.$toast.success("登录成功");
+      } catch (err) {
+        if (err.response.status === 400) {
+          this.$toast.fail("手机号或验证码错误");
+        }
+        this.$toast.fail("登录失败，请稍后重试");
+      }
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
