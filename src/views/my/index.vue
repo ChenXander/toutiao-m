@@ -6,11 +6,11 @@
         <div class="left">
           <van-image
             class="avatar"
-            src="https://img01.yzcdn.cn/vant/cat.jpeg"
+            :src="userInfo.photo"
             round
             fit="cover"
           />
-          <span class="name">我的头条号</span>
+          <span class="name">{{userInfo.name}}</span>
         </div>
 
         <div class="right">
@@ -20,19 +20,19 @@
 
       <div class="data-stats">
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">{{userInfo.art_count}}</span>
           <span class="text">头条</span>
         </div>
         <div class="data-item">
-          <span class="count">66</span>
+          <span class="count">{{userInfo.follow_count}}</span>
           <span class="text">关注</span>
         </div>
         <div class="data-item">
-          <span class="count">88</span>
+          <span class="count">{{userInfo.fans_count}}</span>
           <span class="text">粉丝</span>
         </div>
         <div class="data-item">
-          <span class="count">88</span>
+          <span class="count">{{userInfo.like_count}}</span>
           <span class="text">获赞</span>
         </div>
       </div>
@@ -78,17 +78,24 @@
 
 <script>
 import { mapState } from 'vuex'
+import { getUserInfo } from '@/api/user'
 
 export default {
   name: 'MyIndex',
   components: {},
   data () {
-    return {}
+    return {
+      userInfo: {} // 用户信息
+    }
   },
   computed: {
     ...mapState(['user'])
   },
-  created () {},
+  created () {
+    if (this.user) {
+      this.loadUserInfo()
+    }
+  },
   methods: {
     onLogout () {
       // 退出登录提示
@@ -104,6 +111,15 @@ export default {
         .catch(() => {
           // on cancel
         })
+    },
+
+    async loadUserInfo () {
+      try {
+        const { data } = await getUserInfo()
+        this.userInfo = data.data
+      } catch (err) {
+        this.$toast('获取数据失败，请稍后重试')
+      }
     }
   }
 }
