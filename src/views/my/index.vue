@@ -1,16 +1,7 @@
 <template>
   <div class="my-container">
-    <!-- 未登录头部 -->
-    <div class="header not-login">
-      <div class="login-btn" @click="$router.push('/login')">
-        <img class="mobile-img" src="~@/assets/mobile.png" alt="" />
-        <span class="text">登录 / 注册</span>
-      </div>
-    </div>
-    <!-- /未登录头部 -->
-
     <!-- 已登录头部 -->
-    <div class="header user-info">
+    <div class="header user-info" v-if="user">
       <div class="base-info">
         <div class="left">
           <van-image
@@ -37,28 +28,84 @@
           <span class="text">关注</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">88</span>
           <span class="text">粉丝</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
+          <span class="count">88</span>
           <span class="text">获赞</span>
         </div>
       </div>
     </div>
     <!-- /已登录头部 -->
+
+    <!-- 未登录头部 -->
+    <div class="header not-login" v-else>
+      <div class="login-btn" @click="$router.push('/login')">
+        <img class="mobile-img" src="~@/assets/mobile.png" alt="" />
+        <span class="text">登录 / 注册</span>
+      </div>
+    </div>
+    <!-- /未登录头部 -->
+
+    <!-- 宫格导航 -->
+    <van-grid class="grid-nav" :column-num="2" clickable>
+      <van-grid-item class="grid-item" icon="photo-o" text="文字">
+        <i slot="icon" class="toutiao toutiao-shoucang"></i>
+        <span slot="text" class="text">收藏</span>
+      </van-grid-item>
+
+      <van-grid-item class="grid-item" icon="photo-o" text="文字">
+        <i slot="icon" class="toutiao toutiao-lishi"></i>
+        <span slot="text" class="text">历史</span>
+      </van-grid-item>
+    </van-grid>
+    <!-- /宫格导航 -->
+
+    <!-- 消息通知, 小智同学，退出登录-->
+    <van-cell title="消息通知" is-link />
+    <van-cell title="小智同学" is-link />
+    <van-cell
+      class="lgout-cell"
+      title="退出登录"
+      v-if="user"
+      @click="onLogout"
+      clickable
+    />
+    <!-- /消息通知, 小智同学，退出登录-->
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'MyIndex',
   components: {},
   data () {
     return {}
   },
+  computed: {
+    ...mapState(['user'])
+  },
   created () {},
-  methods: {}
+  methods: {
+    onLogout () {
+      // 退出登录提示
+      // 组件中需要加this.$调用dialog
+      this.$dialog
+        .confirm({
+          title: '确认退出吗？'
+        })
+        .then(() => {
+          // 确认退出清token
+          this.$store.commit('setUser', null)
+        })
+        .catch(() => {
+          // on cancel
+        })
+    }
+  }
 }
 </script>
 
@@ -133,6 +180,30 @@ export default {
         }
       }
     }
+  }
+
+  .grid-nav {
+    .grid-item {
+      height: 141px;
+      i.toutiao {
+        font-size: 45px;
+      }
+      .toutiao-shoucang {
+        color: #eb5253;
+      }
+      .toutiao-lishi {
+        color: #ff9d1d;
+      }
+      span.text {
+        font-size: 28px;
+      }
+    }
+  }
+
+  .lgout-cell {
+    text-align: center;
+    color: #d86262;
+    margin-top: 9px;
   }
 }
 </style>

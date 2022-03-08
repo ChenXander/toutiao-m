@@ -18,7 +18,7 @@ export default new Vuex.Store({
       state.user = data
       //   防止刷新丢失，数倍备份到本地存储
       // window.localStorage.setItem(TOKEN_KEY, JSON.stringify(state.user))
-      setItem(TOKEN_KEY, state.data)
+      setItem(TOKEN_KEY, state.user)
     }
   },
   actions: {},

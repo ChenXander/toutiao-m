@@ -21,7 +21,8 @@
       </van-tabbar-item>
       <van-tabbar-item replace to="/my">
         <i slot="icon" class="toutiao toutiao-wode"></i>
-        <span class="text">我的</span>
+        <span class="text" v-if="user">我的</span>
+        <span class="text" v-else>未登录</span>
       </van-tabbar-item>
     </van-tabbar>
     <!-- /标签导航栏 -->
@@ -29,6 +30,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'LayoutIndex',
   components: {},
@@ -36,6 +39,9 @@ export default {
     return {
       active: 0
     }
+  },
+  computed: {
+    ...mapState(['user'])
   },
   created () {},
   methods: {}
