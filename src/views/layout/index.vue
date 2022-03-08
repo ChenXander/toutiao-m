@@ -6,8 +6,8 @@
 
     <!-- 标签导航栏 -->
     <!-- route开启路由模式 -->
-    <van-tabbar class="layout-tabbar" v-model="active" route>
-      <van-tabbar-item replace to="/home">
+    <van-tabbar class="layout-tabbar" route>
+      <van-tabbar-item replace to="/">
         <i slot="icon" class="toutiao toutiao-shouye"></i>
         <span class="text">首页</span>
       </van-tabbar-item>
@@ -16,13 +16,12 @@
         <span class="text">问答</span>
       </van-tabbar-item>
       <van-tabbar-item replace to="/video">
-        <i slot="icon" replace to="/home" class="toutiao toutiao-shipin"></i>
+        <i slot="icon" class="toutiao toutiao-shipin"></i>
         <span class="text">视频</span>
       </van-tabbar-item>
       <van-tabbar-item replace to="/my">
         <i slot="icon" class="toutiao toutiao-wode"></i>
-        <span class="text" v-if="user">我的</span>
-        <span class="text" v-else>未登录</span>
+        <span class="text">{{ $store.state.user ? "我的" : "未登录" }}</span>
       </van-tabbar-item>
     </van-tabbar>
     <!-- /标签导航栏 -->
@@ -30,21 +29,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
-  name: 'LayoutIndex',
-  components: {},
-  data () {
-    return {
-      active: 0
-    }
-  },
-  computed: {
-    ...mapState(['user'])
-  },
-  created () {},
-  methods: {}
+  name: 'LayoutIndex'
 }
 </script>
 

@@ -12,7 +12,7 @@ const routes = [
   },
   {
     path: '/',
-    name: 'layout',
+    // name: 'layout', 如果父路由有默认子路由，那它的 name 没有意义
     component: () => import('@/views/layout'),
     children: [
       {
@@ -31,7 +31,7 @@ const routes = [
         component: () => import('@/views/video')
       },
       {
-        path: '/my', // 默认子路由
+        path: '/my',
         name: 'my',
         component: () => import('@/views/my')
       }
