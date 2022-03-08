@@ -8,7 +8,11 @@
 
     <!-- 频道列表 -->
     <van-tabs class="channel-tabs" v-model="active" animated swipeable>
-      <van-tab :title="channel.name" v-for="channel in channels" :key="channel.id">{{ channel.name }}</van-tab>
+      <van-tab :title="channel.name" v-for="channel in channels" :key="channel.id">
+        <!-- 文章列表 -->
+        <article-list :channel="channel" />
+        <!-- /文章列表 -->
+      </van-tab>
       <div slot="nav-right" class="placeholder"></div>
       <div slot="nav-right" class="hamburger-btn">
         <i class="toutiao toutiao-gengduo"></i>
@@ -20,10 +24,11 @@
 
 <script>
 import { getUserChannels } from '@/api/user'
+import ArticleList from './components/article-list.vue'
 
 export default {
   name: 'HomeIndex',
-  components: {},
+  components: { ArticleList },
   data() {
     return {
       active: 0,
