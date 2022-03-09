@@ -25,6 +25,7 @@
         <article-list :channel="channel" />
         <!-- /文章列表 -->
       </van-tab>
+
       <div slot="nav-right" class="placeholder"></div>
       <div slot="nav-right" class="hamburger-btn">
         <i class="toutiao toutiao-gengduo"></i>
