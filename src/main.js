@@ -6,6 +6,7 @@ import Vant from 'vant' // 导入vant组件库
 import 'vant/lib/index.css'
 import './styles/index.less' // 加载全局样式
 import 'amfe-flexible' // 导入lib-flexible，动态设置rem
+import './utils/dayjs' // 导入dayjs
 
 Vue.use(Vant)
 
