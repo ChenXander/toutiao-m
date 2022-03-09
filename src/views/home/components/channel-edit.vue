@@ -3,8 +3,14 @@
     <!-- 我的频道 -->
     <van-cell :border="false">
       <div slot="title" class="title-text">我的频道</div>
-      <van-button class="edit-btn" type="danger" plain round size="mini"
-        >编辑</van-button
+      <van-button
+        class="edit-btn"
+        type="danger"
+        plain
+        round
+        size="mini"
+        @click="isEdit = !isEdit"
+        >{{ isEdit ? '完成' : '编辑' }}</van-button
       >
     </van-cell>
 
@@ -13,8 +19,12 @@
         class="grid-item"
         v-for="(channel, index) in myChannels"
         :key="index"
-        icon="clear"
       >
+        <van-icon
+          v-show="isEdit && !fiexChannels.includes(channel.id)"
+          slot="icon"
+          name="clear"
+        ></van-icon>
         <!-- v-bind:class 语法: 一个对象，对象中的 key 表示要作用的 CSS 类名,
        对象中的 value 要计算出布尔值, true，则作用该类名;false，不作用类名 -->
         <span class="text" :class="{ active: index === active }" slot="text">{{
@@ -36,6 +46,7 @@
         :key="index"
         icon="plus"
         :text="channel.name"
+        @click="onAddChannel(channel)"
       />
     </van-grid>
     <!-- /频道推荐 -->
@@ -48,7 +59,7 @@ import { getAllChannels } from '@/api/channel'
 export default {
   name: 'ChannelEdit',
   components: {},
-  props: {
+  propsData: {
     myChannels: {
       type: Array,
       required: true
@@ -60,7 +71,9 @@ export default {
   },
   data() {
     return {
-      allChannels: [] // 所有频道
+      allChannels: [], // 所有频道
+      isEdit: false, // 控制编辑的显示
+      fiexChannels: [0] // 固定频道，不允许删除
     }
   },
   computed: {
@@ -101,6 +114,10 @@ export default {
       } catch (err) {
         this.$toast('数据获取失败', err)
       }
+    },
+
+    onAddChannel(channel) {
+      this.myChannels.push(channel)
     }
   }
 }
@@ -137,6 +154,9 @@ export default {
       }
       .active {
         color: red;
+      }
+      .van-grid-item__icon-wrapper {
+        position: unset;
       }
     }
   }

@@ -45,7 +45,7 @@
       :style="{ height: '100%' }"
       close-icon-position="top-left"
     >
-      <channel-edit :myChannels="channels" :active="active" />
+      <channel-edit :my-channels="channels" :active="active" />
     </van-popup>
     <!-- /频道编辑弹出层 -->
   </div>
