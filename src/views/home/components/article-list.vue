@@ -111,12 +111,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// .article-list {
-//   position: fixed;
-//   top: 180px;
-//   bottom: 100px;
-//   right: 0;
-//   left: 0;
-//   overflow-y: auto;
-// }
+.article-list {
+  height: 79vh;
+  overflow-y: auto;
+}
 </style>
