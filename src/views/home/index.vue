@@ -2,13 +2,25 @@
   <div class="home-container">
     <!-- 导航栏 -->
     <van-nav-bar class="page-nav-bar">
-      <van-button class="search-btn" slot="title" type="info" size="small" icon="search" round>搜索</van-button>
+      <van-button
+        class="search-btn"
+        slot="title"
+        type="info"
+        size="small"
+        icon="search"
+        round
+        >搜索</van-button
+      >
     </van-nav-bar>
     <!-- /导航栏 -->
 
     <!-- 频道列表 -->
     <van-tabs class="channel-tabs" v-model="active" animated swipeable>
-      <van-tab :title="channel.name" v-for="channel in channels" :key="channel.id">
+      <van-tab
+        :title="channel.name"
+        v-for="channel in channels"
+        :key="channel.id"
+      >
         <!-- 文章列表 -->
         <article-list :channel="channel" />
         <!-- /文章列表 -->
@@ -53,6 +65,7 @@ export default {
 
 <style lang="less" scoped>
 .home-container {
+  padding-bottom: 100px;
   .search-btn {
     width: 555px;
     height: 64px;
