@@ -19,9 +19,10 @@
         class="grid-item"
         v-for="(channel, index) in myChannels"
         :key="index"
+        @click="onMyChannelClick(channel, index)"
       >
         <van-icon
-          v-show="isEdit && !fiexChannels.includes(channel.id)"
+          v-show="isEdit && !fixedChannels.includes(channel.id)"
           slot="icon"
           name="clear"
         ></van-icon>
@@ -59,7 +60,7 @@ import { getAllChannels } from '@/api/channel'
 export default {
   name: 'ChannelEdit',
   components: {},
-  propsData: {
+  props: {
     myChannels: {
       type: Array,
       required: true
@@ -73,7 +74,8 @@ export default {
     return {
       allChannels: [], // 所有频道
       isEdit: false, // 控制编辑的显示
-      fiexChannels: [0] // 固定频道，不允许删除
+      fixedChannels: [0], // 固定频道，不允许删除
+      newMyChannels: this.myChannels // todo 子组件修改父组件传值，待优化
     }
   },
   computed: {
@@ -95,6 +97,8 @@ export default {
     } */
 
     //* 利用数组的filter方法实现数据的过滤
+    //* 计算属性会观测内部依赖数据的变化
+    //* 如果依赖的数据发生变化，则计算属性会重新执行
     recommendChannels() {
       return this.allChannels.filter((channel) => {
         return !this.myChannels.find((myChannel) => {
@@ -117,7 +121,29 @@ export default {
     },
 
     onAddChannel(channel) {
-      this.myChannels.push(channel)
+      // todo 有待优化写法
+      this.newMyChannels.push(channel)
+    },
+
+    onMyChannelClick(channel, index) {
+      if (this.isEdit) {
+        // 1.如果是固定频道则不删除
+        if (this.fixedChannels.includes(channel.id)) {
+          return
+        }
+        // 2.删除频道项
+        this.newMyChannels.splice(index, 1)
+        // 3.如果删除的激活频道之前的频道，则更新激活的频道项
+        // 参数1：要删除的元素的索引
+        // 参数2：删除的个数，如果不指定，则从参数1开始一直删除
+        if (index <= this.active) {
+          // 让激活频道的索引 - 1
+          this.$emit('update-active', this.active - 1, true)
+        }
+      } else {
+        // 非编辑状态，执行切换频道
+        this.$emit('update-active', index, false)
+      }
     }
   }
 }
