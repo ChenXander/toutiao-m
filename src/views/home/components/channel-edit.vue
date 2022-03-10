@@ -55,7 +55,13 @@
 </template>
 
 <script>
-import { getAllChannels } from '@/api/channel'
+import {
+  getAllChannels,
+  addUserChannel,
+  deleteUserChannel
+} from '@/api/channel'
+import { mapState } from 'vuex'
+import { setItem } from '@/utils/storage'
 
 export default {
   name: 'ChannelEdit',
@@ -74,8 +80,7 @@ export default {
     return {
       allChannels: [], // 所有频道
       isEdit: false, // 控制编辑的显示
-      fixedChannels: [0], // 固定频道，不允许删除
-      newMyChannels: this.myChannels // todo 子组件修改父组件传值，待优化
+      fixedChannels: [0] // 固定频道，不允许删除
     }
   },
   computed: {
@@ -105,7 +110,9 @@ export default {
           return myChannel.id === channel.id
         })
       })
-    }
+    },
+
+    ...mapState(['user'])
   },
   created() {
     this.loadAllChannels()
@@ -120,9 +127,24 @@ export default {
       }
     },
 
-    onAddChannel(channel) {
+    async onAddChannel(channel) {
       // todo 有待优化写法
-      this.newMyChannels.push(channel)
+      this.myChannels.push(channel)
+      // 数据持久化处理
+      if (this.user) {
+        try {
+          // 已登录，把数据请求接口放到线上
+          await addUserChannel({
+            id: channel.id, // 频道ID
+            seq: this.myChannels.length // 序号
+          })
+        } catch (err) {
+          this.$toast('保存失败，请稍后重试')
+        }
+      } else {
+        // 未登录，把数据存储到本地
+        setItem('TOUTIAO_CHANNELS', this.myChannels)
+      }
     },
 
     onMyChannelClick(channel, index) {
@@ -132,7 +154,7 @@ export default {
           return
         }
         // 2.删除频道项
-        this.newMyChannels.splice(index, 1)
+        this.myChannels.splice(index, 1) // todo 有待优化写法
         // 3.如果删除的激活频道之前的频道，则更新激活的频道项
         // 参数1：要删除的元素的索引
         // 参数2：删除的个数，如果不指定，则从参数1开始一直删除
@@ -140,9 +162,26 @@ export default {
           // 让激活频道的索引 - 1
           this.$emit('update-active', this.active - 1, true)
         }
+
+        // 4.处理持久化
+        this.deleteChannel(channel)
       } else {
         // 非编辑状态，执行切换频道
         this.$emit('update-active', index, false)
+      }
+    },
+
+    async deleteChannel(channel) {
+      try {
+        if (this.user) {
+          // 已登录，则将数据更新到线上
+          deleteUserChannel(channel.id)
+        } else {
+          // 未登录，将数据更新到本地
+          setItem('TOUTIAO_CHANNELS', this.myChannels)
+        }
+      } catch (error) {
+        this.$toast('操作失败，请稍后重试')
       }
     }
   }
