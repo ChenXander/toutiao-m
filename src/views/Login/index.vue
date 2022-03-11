@@ -52,7 +52,7 @@ import { setToken } from '@/utils/token'
 import { Notify } from 'vant'
 
 export default {
-  name: '',
+  name: 'Login',
   components: {},
   data() {
     return {
