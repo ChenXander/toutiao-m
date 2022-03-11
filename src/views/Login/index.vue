@@ -48,6 +48,7 @@
 
 <script>
 import { loginAPI } from '@/api'
+import { setToken } from '@/utils/token'
 import { Notify } from 'vant'
 
 export default {
@@ -72,6 +73,7 @@ export default {
         const res = await loginAPI(this.user)
         console.log(res)
         Notify({ type: 'success', message: '登录成功！！！' })
+        setToken(res.data.data.token)
       } catch (err) {
         Notify({ type: 'danger', message: '账号或密码错误' })
       }
