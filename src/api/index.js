@@ -9,7 +9,11 @@ export const getAllChannelsAPI = () => request({
 })
 
 // 登录接口
-export const loginAPI = () => request({
+export const loginAPI = ({ mobile, code }) => request({
   url: '/v1_0/authorizations',
-  method: 'POST'
+  method: 'POST',
+  data: {
+    mobile,
+    code
+  }
 })

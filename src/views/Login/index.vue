@@ -30,7 +30,14 @@
         :rules="[{ required: true, message: '请填写密码', pattern: /^\d{6}$/ }]"
       />
       <div style="margin: 16px">
-        <van-button round block type="info" native-type="submit"
+        <van-button
+          round
+          block
+          type="info"
+          native-type="submit"
+          :disabled="isLoading"
+          :loading="isLoading"
+          loading-text="加载中..."
           >登录</van-button
         >
       </div>
@@ -40,21 +47,36 @@
 </template>
 
 <script>
+import { loginAPI } from '@/api'
+import { Notify } from 'vant'
+
 export default {
   name: '',
   components: {},
   data() {
     return {
       user: {
-        mobile: '',
-        code: ''
-      }
+        mobile: '13866666666',
+        code: '246810'
+      },
+      isLoading: false // 登录按钮加载状态的显示隐藏
     }
   },
   created() {},
   methods: {
-    onSubmit(values) {
-      console.log('submit', values)
+    async onSubmit(values) {
+      // 加载状态设置true
+      this.isLoading = true
+
+      try {
+        const res = await loginAPI(this.user)
+        console.log(res)
+        Notify({ type: 'success', message: '登录成功！！！' })
+      } catch (err) {
+        Notify({ type: 'danger', message: '账号或密码错误' })
+      }
+      // 网络请求完成无论成功/报错,关闭加载状态
+      this.isLoading = false
     }
   }
 }
