@@ -74,6 +74,11 @@ export default {
         console.log(res)
         Notify({ type: 'success', message: '登录成功！！！' })
         setToken(res.data.data.token)
+        // 跳转一定要写在最后，最后执行
+        // this.$router.push()压栈(会产生历史记录。可以回退)，this.$router.replace()替换(不会产生历史记录)
+        this.$router.replace({
+          path: '/layout/home' // 路由规则里没有重定向所以写全
+        })
       } catch (err) {
         Notify({ type: 'danger', message: '账号或密码错误' })
       }
