@@ -15,13 +15,13 @@
 
     <!-- tab栏 -->
     <div class="main">
-      <van-tabs v-model="active" sticky offset-top="1.226667rem">
+      <van-tabs v-model="active" animated sticky offset-top="1.226667rem">
         <van-tab
           v-for="item in userChannelList"
           :title="item.name"
           :key="item.id"
         >
-          {{ item.name }}
+          <article-list></article-list>
         </van-tab>
       </van-tabs>
     </div>
@@ -31,10 +31,11 @@
 
 <script>
 import { getUserChannelsAPI } from '@/api'
+import ArticleList from './components/ArticleList.vue'
 
 export default {
   name: 'Home',
-  components: {},
+  components: { ArticleList },
   data() {
     return {
       active: 0,
