@@ -15,6 +15,7 @@
           :key="item.art_id"
           :artItem="item"
           @disLikeEV="dislikeFn"
+          @reportEV="reportFn"
         ></ArticleItem>
         <!-- /文章列表 -->
       </van-list>
@@ -24,7 +25,11 @@
 
 <script>
 import ArticleItem from './ArticleItem.vue'
-import { getAllArticleListAPI, dislikeArticleAPI } from '@/api/index.js'
+import {
+  getAllArticleListAPI,
+  dislikeArticleAPI,
+  reportArticleAPI
+} from '@/api/index.js'
 import { Notify } from 'vant'
 
 export default {
@@ -84,11 +89,21 @@ export default {
       this.getArticleListFn()
     },
 
+    // 反馈不感兴趣
     async dislikeFn(id) {
       await dislikeArticleAPI({
         artId: id
       })
       Notify({ type: 'success', message: '反馈成功' })
+    },
+
+    // 反馈垃圾内容
+    async reportFn(id, value) {
+      await reportArticleAPI({
+        artId: id,
+        type: value
+      })
+      Notify({ type: 'success', message: '举报成功' })
     }
   }
 }

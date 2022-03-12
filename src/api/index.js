@@ -45,6 +45,22 @@ export const dislikeArticleAPI = ({ artId }) => {
   })
 }
 
+// 文章反馈面板-反馈垃圾内容
+export const reportArticleAPI = ({ artId, type }) => {
+  return request({
+    url: '/v1_0/article/reports',
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${getToken()}` // Bearer后必须有空格
+    },
+    data: {
+      target: artId,
+      type: type,
+      remark: '如果你想写，你可以在逻辑页面判断下，如果类型是0，再给一个弹出框输入其他问题，传参到这里'
+    }
+  })
+}
+
 // 登录接口
 export const loginAPI = ({ mobile, code }) => request({
   url: '/v1_0/authorizations',

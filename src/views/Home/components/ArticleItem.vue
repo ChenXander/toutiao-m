@@ -92,6 +92,10 @@ export default {
         this.$emit('disLikeEV', this.artItem.art_id)
         // 无论反馈成功/失败，关闭/隐藏反馈面板
         this.show = false
+      } else {
+        // 二级反馈选项
+        this.$emit('reportEV', this.artItem.art_id, action.value)
+        this.show = false
       }
     },
 
