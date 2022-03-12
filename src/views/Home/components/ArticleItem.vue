@@ -1,47 +1,59 @@
 <template>
-  <!-- 一条文章单元格 -->
-  <van-cell>
-    <!-- 标题区的插槽 -->
-    <template #title>
-      <div class="title-box">
-        <!-- 标题 -->
-        <span>{{ artItem.title }}</span>
-        <!-- 单图 -->
-        <img
-          class="thumb"
-          v-if="artItem.cover.type === 1"
-          :src="artItem.cover.images[0]"
-          alt=""
-        />
-      </div>
-      <!-- 多图 -->
-      <div class="thumb-box" v-if="artItem.cover.type > 1">
-        <img
-          class="thumb"
-          v-for="(imgUrl, index) in artItem.cover.images"
-          :key="index"
-          :src="imgUrl"
-          alt=""
-        />
-      </div>
-    </template>
-    <!-- /标题区的插槽 -->
-
-    <!-- label区域插槽 -->
-    <template #label>
-      <div class="label-box">
-        <div>
-          <span>{{ artItem.aut_name }}</span>
-          <span>{{ artItem.comm_count }}评论</span>
-          <span>{{ formatTime(artItem.pubdate) }}</span>
+  <div>
+    <!-- 一条文章单元格 -->
+    <van-cell>
+      <!-- 标题区的插槽 -->
+      <template #title>
+        <div class="title-box">
+          <!-- 标题 -->
+          <span>{{ artItem.title }}</span>
+          <!-- 单图 -->
+          <img
+            class="thumb"
+            v-if="artItem.cover.type === 1"
+            :src="artItem.cover.images[0]"
+            alt=""
+          />
         </div>
-        <!-- 反馈按钮 -->
-        <van-icon name="cross" />
-      </div>
-    </template>
-    <!-- /label区域插槽 -->
-  </van-cell>
-  <!-- /一条文章单元格 -->
+        <!-- 多图 -->
+        <div class="thumb-box" v-if="artItem.cover.type > 1">
+          <img
+            class="thumb"
+            v-for="(imgUrl, index) in artItem.cover.images"
+            :key="index"
+            :src="imgUrl"
+            alt=""
+          />
+        </div>
+      </template>
+      <!-- /标题区的插槽 -->
+
+      <!-- label区域插槽 -->
+      <template #label>
+        <div class="label-box">
+          <div>
+            <span>{{ artItem.aut_name }}</span>
+            <span>{{ artItem.comm_count }}评论</span>
+            <span>{{ formatTime(artItem.pubdate) }}</span>
+          </div>
+          <!-- 反馈按钮 -->
+          <van-icon name="cross" @click="show = true" />
+        </div>
+      </template>
+      <!-- /label区域插槽 -->
+    </van-cell>
+    <!-- /一条文章单元格 -->
+
+    <!-- 关闭按钮×，反馈面板 -->
+    <van-action-sheet
+      v-model="show"
+      :actions="actions"
+      @select="onSelect"
+      get-container="body"
+      cancel-text="取消"
+    />
+    <!-- /关闭按钮×，反馈面板 -->
+  </div>
 </template>
 
 <script>
@@ -54,11 +66,24 @@ export default {
     artItem: Object // 文章对象
   },
   data() {
-    return {}
+    return {
+      show: false, // 反馈面板显示与隐藏
+      actions: [
+        { name: '不感兴趣' },
+        { name: '反馈垃圾内容' },
+        { name: '拉黑作者' }
+      ]
+    }
   },
   created() {},
   methods: {
-    formatTime: timeAgo // 函数体是timeAgo
+    formatTime: timeAgo, // 函数体是timeAgo
+
+    onSelect(item) {
+      // 默认情况下点击选项时不会自动收起
+      // 可以通过 close-on-click-action 属性开启自动收起
+      this.show = false
+    }
   }
 }
 </script>

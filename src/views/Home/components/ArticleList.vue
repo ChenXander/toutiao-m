@@ -7,6 +7,7 @@
         finished-text="没有更多了"
         :immediate-check="false"
         @load="onLoad"
+        offset="50"
       >
         <!-- 文章列表 -->
         <ArticleItem
