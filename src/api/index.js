@@ -18,6 +18,19 @@ export const getUserChannelsAPI = () => request({
   }
 })
 
+// 获取文章推荐数据
+export const getAllArticlesAPI = ({ channel_id, timestamp }) => request({
+  url: '/v1_0/articles',
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${getToken()}` // Bearer后必须有空格
+  },
+  params: { // 这里的参数会被axios拼接到URL?后面(查询字符串)
+    channel_id,
+    timestamp
+  }
+})
+
 // 登录接口
 export const loginAPI = ({ mobile, code }) => request({
   url: '/v1_0/authorizations',

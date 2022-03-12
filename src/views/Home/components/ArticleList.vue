@@ -1,9 +1,11 @@
 <template>
   <div>
     <!-- 文章列表 -->
-    <article-item></article-item>
-    <article-item></article-item>
-    <article-item></article-item>
+    <article-item
+      v-for="item in list"
+      :key="item.art_id"
+      :artItem="item"
+    ></article-item>
     <!-- /文章列表 -->
   </div>
 </template>
@@ -13,6 +15,9 @@ import ArticleItem from './ArticleItem.vue'
 export default {
   name: '',
   components: { ArticleItem },
+  props: {
+    list: Array // 文章列表数组
+  },
   data() {
     return {}
   },

@@ -21,7 +21,7 @@
           :title="item.name"
           :key="item.id"
         >
-          <article-list></article-list>
+          <article-list :list="articleList"></article-list>
         </van-tab>
       </van-tabs>
     </div>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { getUserChannelsAPI } from '@/api'
+import { getUserChannelsAPI, getAllArticlesAPI } from '@/api'
 import ArticleList from './components/ArticleList.vue'
 
 export default {
@@ -39,14 +39,22 @@ export default {
   data() {
     return {
       active: 0,
-      userChannelList: [] // 用户频道列表
+      userChannelList: [], // 用户频道列表
+      articleList: [] // 文章列表
     }
   },
   async created() {
-    try {
-      const res = await getUserChannelsAPI()
-      this.userChannelList = res.data.data.channels
-    } catch (error) {}
+    // 频道列表
+    const res = await getUserChannelsAPI()
+    this.userChannelList = res.data.data.channels
+
+    // 文章列表
+    const timer = new Date()
+    const res2 = await getAllArticlesAPI({
+      channel_id: 0, // 先默认请求推荐频道数据
+      timestamp: timer.getTime()
+    })
+    this.articleList = res2.data.data.results
   },
   methods: {}
 }

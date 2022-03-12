@@ -5,7 +5,7 @@
     <template #title>
       <div class="title-box">
         <!-- 标题 -->
-        <span>文章标题</span>
+        <span>{{ artItem.title }}</span>
       </div>
     </template>
     <!-- /标题区的插槽 -->
@@ -14,9 +14,9 @@
     <template #label>
       <div class="label-box">
         <div>
-          <span>作者</span>
-          <span>0评论</span>
-          <span>8个月</span>
+          <span>{{ artItem.art_name }}</span>
+          <span>{{ artItem.comm_count }}</span>
+          <span>{{ artItem.pubdate }}</span>
         </div>
         <!-- 反馈按钮 -->
         <van-icon name="cross" />
@@ -31,6 +31,9 @@
 export default {
   name: '',
   components: {},
+  props: {
+    artItem: [] // 文章数据
+  },
   data() {
     return {}
   },
