@@ -49,8 +49,10 @@
       v-model="show"
       :actions="actions"
       @select="onSelect"
+      @cancel="cancelFn"
+      @close="closeFn"
       get-container="body"
-      cancel-text="取消"
+      :cancel-text="bottomText"
     />
     <!-- /关闭按钮×，反馈面板 -->
   </div>
@@ -58,6 +60,7 @@
 
 <script>
 import { timeAgo } from '@/utils/date.js'
+import { firstActions, secondActions } from '@/api/report.js'
 
 export default {
   name: '',
@@ -68,21 +71,39 @@ export default {
   data() {
     return {
       show: false, // 反馈面板显示与隐藏
-      actions: [
-        { name: '不感兴趣' },
-        { name: '反馈垃圾内容' },
-        { name: '拉黑作者' }
-      ]
+      actions: firstActions, // 反馈面板选项数组
+      bottomText: '取消' // 反馈面板的底部按钮文字
     }
   },
   created() {},
   methods: {
     formatTime: timeAgo, // 函数体是timeAgo
 
-    onSelect(item) {
+    // action:反馈的选项内容，item:反馈的选项索引值
+    onSelect(action, item) {
       // 默认情况下点击选项时不会自动收起
       // 可以通过 close-on-click-action 属性开启自动收起
-      this.show = false
+      //   this.show = false
+
+      if (action.name === '反馈垃圾内容') {
+        this.actions = secondActions
+        this.bottomText = '返回'
+      }
+    },
+
+    // 底部按钮的点击事件
+    cancelFn() {
+      if (this.bottomText === '返回') {
+        this.show = true
+        this.actions = firstActions
+        this.bottomText = '取消'
+      }
+    },
+
+    // 关闭面板触发事件
+    closeFn() {
+      this.actions = firstActions
+      this.bottomText = '取消'
     }
   }
 }
