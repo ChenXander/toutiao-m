@@ -15,11 +15,18 @@
 
     <!-- tab栏 -->
     <div class="main">
-      <van-tabs v-model="active" animated sticky offset-top="1.226667rem">
+      <van-tabs
+        v-model="channelId"
+        @change="channelChangeFn"
+        animated
+        sticky
+        offset-top="1.226667rem"
+      >
         <van-tab
           v-for="item in userChannelList"
           :title="item.name"
           :key="item.id"
+          :name="item.id"
         >
           <ArticleList :list="articleList"></ArticleList>
         </van-tab>
@@ -38,7 +45,7 @@ export default {
   components: { ArticleList },
   data() {
     return {
-      active: 0,
+      channelId: 0, // tab导航，激活频道ID，默认0，页面默认显示推荐页面
       userChannelList: [], // 用户频道列表
       articleList: [] // 文章列表
     }
@@ -50,12 +57,24 @@ export default {
 
     // 文章列表
     const res2 = await getAllArticlesAPI({
-      channel_id: 0, // 先默认请求推荐频道数据
+      channel_id: this.channelId, // 先默认请求推荐频道数据
       timestamp: Date.now()
     })
     this.articleList = res2.data.data.results
+
+    this.channelChangeFn()
   },
-  methods: {}
+  methods: {
+    // tab切换事件
+    async channelChangeFn() {
+      // 文章列表
+      const res = await getAllArticlesAPI({
+        channel_id: this.channelId, // 先默认请求推荐频道数据
+        timestamp: Date.now()
+      })
+      this.articleList = res.data.data.results
+    }
+  }
 }
 </script>
 
