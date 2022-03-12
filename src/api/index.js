@@ -1,7 +1,6 @@
 // 统一封装接口方法
 // 每个方法负责请求一个url，便于统一管理
 import axios from '@/utils/request.js'
-import { getToken } from '@/utils/token.js'
 
 // 获取所有频道
 export const getAllChannelsAPI = () => axios({
@@ -12,19 +11,13 @@ export const getAllChannelsAPI = () => axios({
 // 获取用户频道,若没有登录则默认返回后台设置的默认频道列表
 export const getUserChannelsAPI = () => axios({
   url: '/v1_0/user/channels',
-  method: 'GET',
-  headers: {
-    Authorization: `Bearer ${getToken()}` // Bearer后必须有空格
-  }
+  method: 'GET'
 })
 
 // 获取文章推荐数据
 export const getAllArticleListAPI = ({ channel_id, timestamp }) => axios({
   url: '/v1_0/articles',
   method: 'GET',
-  headers: {
-    Authorization: `Bearer ${getToken()}` // Bearer后必须有空格
-  },
   params: { // 这里的参数会被axios拼接到URL?后面(查询字符串)
     channel_id,
     timestamp
@@ -36,9 +29,6 @@ export const dislikeArticleAPI = ({ artId }) => {
   return axios({
     url: '/v1_0/article/dislikes',
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${getToken()}` // Bearer后必须有空格
-    },
     data: {
       target: artId
     }
@@ -50,9 +40,6 @@ export const reportArticleAPI = ({ artId, type }) => {
   return axios({
     url: '/v1_0/article/reports',
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${getToken()}` // Bearer后必须有空格
-    },
     data: {
       target: artId,
       type: type,

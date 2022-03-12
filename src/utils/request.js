@@ -2,6 +2,7 @@
 import theAxios from 'axios'
 import router from '@/router'
 import { Notify } from 'vant'
+import { getToken } from '@/utils/token.js'
 
 const axios = theAxios.create({
   baseURL: 'http://toutiao.itheima.net/', // 接口的基准路径
@@ -11,6 +12,13 @@ const axios = theAxios.create({
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
+  // 统一携带token
+  // 判断本地有token在携带，判断具体api/index.js如果没有携带Authorization，再添加
+  // 可选链操作符：?. 如果前面对象里没有length，整个表达式原地返回undefined
+  // 如果getToken()在原地有token值，才能调用length获取长度
+  if (getToken()?.length > 0 && config.headers.Authorization === undefined) {
+    config.headers.Authorization = `Bearer ${getToken()}`
+  }
   return config
 }, function (error) {
   // 对请求错误做些什么
