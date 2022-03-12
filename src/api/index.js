@@ -19,7 +19,7 @@ export const getUserChannelsAPI = () => request({
 })
 
 // 获取文章推荐数据
-export const getAllArticlesAPI = ({ channel_id, timestamp }) => request({
+export const getAllArticleListAPI = ({ channel_id, timestamp }) => request({
   url: '/v1_0/articles',
   method: 'GET',
   headers: {

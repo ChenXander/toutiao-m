@@ -12,16 +12,26 @@
 
 <script>
 import ArticleItem from './ArticleItem.vue'
+import { getAllArticleListAPI } from '@/api'
+
 export default {
   name: '',
   components: { ArticleItem },
   props: {
-    list: Array // 文章列表数组
+    channelId: Number
   },
   data() {
-    return {}
+    return {
+      list: [] // 文章列表数组
+    }
   },
-  created() {},
+  async created() {
+    const res = await getAllArticleListAPI({
+      channel_id: this.channelId,
+      timestamp: Date.now()
+    })
+    this.list = res.data.data.results
+  },
   methods: {}
 }
 </script>
