@@ -24,6 +24,10 @@
           <ArticleList :list="articleList"></ArticleList>
         </van-tab>
       </van-tabs>
+
+      <!-- 编辑频道图标 -->
+      <van-icon name="plus" size="0.37333334rem" class="moreChannels" />
+      <!-- /编辑频道图标 -->
     </div>
     <!-- /tab栏 -->
   </div>
@@ -68,5 +72,19 @@ export default {
 .main {
   padding-top: 46px;
   //   底部在Layout/index.vue给二级路由挂载点
+}
+
+// 设置tab容器的样式
+/deep/ .van-tabs__wrap {
+  padding-right: 30px;
+  background-color: #fff;
+}
+
+// 设置小图标的样式
+.moreChannels {
+  position: fixed;
+  top: 62px;
+  right: 8px;
+  z-index: 999;
 }
 </style>
