@@ -16,10 +16,13 @@
     <!-- tab栏 -->
     <div class="main">
       <van-tabs v-model="active" sticky offset-top="1.226667rem">
-        <van-tab title="标签 1">内容 1</van-tab>
-        <van-tab title="标签 2">内容 2</van-tab>
-        <van-tab title="标签 3">内容 3</van-tab>
-        <van-tab title="标签 4">内容 4</van-tab>
+        <van-tab
+          v-for="item in userChannelList"
+          :title="item.name"
+          :key="item.id"
+        >
+          {{ item.name }}
+        </van-tab>
       </van-tabs>
     </div>
     <!-- /tab栏 -->
@@ -27,15 +30,23 @@
 </template>
 
 <script>
+import { getUserChannelsAPI } from '@/api'
+
 export default {
   name: 'Home',
   components: {},
   data() {
     return {
-      active: 0
+      active: 0,
+      userChannelList: [] // 用户频道列表
     }
   },
-  created() {},
+  async created() {
+    try {
+      const res = await getUserChannelsAPI()
+      this.userChannelList = res.data.data.channels
+    } catch (error) {}
+  },
   methods: {}
 }
 </script>
