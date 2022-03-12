@@ -13,7 +13,9 @@ import {
   Icon,
   Tab,
   Tabs,
-  Cell
+  Cell,
+  List,
+  PullRefresh
 } from 'vant'
 
 Vue.use(NavBar)
@@ -26,6 +28,8 @@ Vue.use(Icon)
 Vue.use(Tab)
 Vue.use(Tabs)
 Vue.use(Cell)
+Vue.use(List)
+Vue.use(PullRefresh)
 
 Vue.config.productionTip = false
 
