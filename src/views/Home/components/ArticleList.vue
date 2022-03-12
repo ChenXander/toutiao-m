@@ -14,6 +14,7 @@
           v-for="item in list"
           :key="item.art_id"
           :artItem="item"
+          @disLikeEV="dislikeFn"
         ></ArticleItem>
         <!-- /文章列表 -->
       </van-list>
@@ -23,7 +24,8 @@
 
 <script>
 import ArticleItem from './ArticleItem.vue'
-import { getAllArticleListAPI } from '@/api'
+import { getAllArticleListAPI, dislikeArticleAPI } from '@/api/index.js'
+import { Notify } from 'vant'
 
 export default {
   name: '',
@@ -80,6 +82,13 @@ export default {
       this.theTime = Date.now()
 
       this.getArticleListFn()
+    },
+
+    async dislikeFn(id) {
+      await dislikeArticleAPI({
+        artId: id
+      })
+      Notify({ type: 'success', message: '反馈成功' })
     }
   }
 }

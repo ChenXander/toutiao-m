@@ -88,6 +88,10 @@ export default {
       if (action.name === '反馈垃圾内容') {
         this.actions = secondActions
         this.bottomText = '返回'
+      } else if (action.name === '不感兴趣') {
+        this.$emit('disLikeEV', this.artItem.art_id)
+        // 无论反馈成功/失败，关闭/隐藏反馈面板
+        this.show = false
       }
     },
 

@@ -31,6 +31,20 @@ export const getAllArticleListAPI = ({ channel_id, timestamp }) => request({
   }
 })
 
+// 文章反馈面板-不感兴趣
+export const dislikeArticleAPI = ({ artId }) => {
+  return request({
+    url: '/v1_0/article/dislikes',
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${getToken()}` // Bearer后必须有空格
+    },
+    data: {
+      target: artId
+    }
+  })
+}
+
 // 登录接口
 export const loginAPI = ({ mobile, code }) => request({
   url: '/v1_0/authorizations',
