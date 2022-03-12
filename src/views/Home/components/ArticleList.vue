@@ -1,11 +1,11 @@
 <template>
   <div>
     <!-- 文章列表 -->
-    <article-item
+    <ArticleItem
       v-for="item in list"
       :key="item.art_id"
       :artItem="item"
-    ></article-item>
+    ></ArticleItem>
     <!-- /文章列表 -->
   </div>
 </template>

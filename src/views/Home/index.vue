@@ -21,7 +21,7 @@
           :title="item.name"
           :key="item.id"
         >
-          <article-list :list="articleList"></article-list>
+          <ArticleList :list="articleList"></ArticleList>
         </van-tab>
       </van-tabs>
     </div>
@@ -49,10 +49,9 @@ export default {
     this.userChannelList = res.data.data.channels
 
     // 文章列表
-    const timer = new Date()
     const res2 = await getAllArticlesAPI({
       channel_id: 0, // 先默认请求推荐频道数据
-      timestamp: timer.getTime()
+      timestamp: Date.now()
     })
     this.articleList = res2.data.data.results
   },

@@ -6,6 +6,23 @@
       <div class="title-box">
         <!-- 标题 -->
         <span>{{ artItem.title }}</span>
+        <!-- 单图 -->
+        <img
+          class="thumb"
+          v-if="artItem.cover.type === 1"
+          :src="artItem.cover.images[0]"
+          alt=""
+        />
+      </div>
+      <!-- 多图 -->
+      <div class="thumb-box" v-if="artItem.cover.type > 1">
+        <img
+          class="thumb"
+          v-for="(imgUrl, index) in artItem.cover.images"
+          :key="index"
+          :src="imgUrl"
+          alt=""
+        />
       </div>
     </template>
     <!-- /标题区的插槽 -->
@@ -14,9 +31,9 @@
     <template #label>
       <div class="label-box">
         <div>
-          <span>{{ artItem.art_name }}</span>
-          <span>{{ artItem.comm_count }}</span>
-          <span>{{ artItem.pubdate }}</span>
+          <span>{{ artItem.aut_name }}</span>
+          <span>{{ artItem.comm_count }}评论</span>
+          <span>{{ artItem.pubdate }}个月前</span>
         </div>
         <!-- 反馈按钮 -->
         <van-icon name="cross" />
@@ -32,7 +49,7 @@ export default {
   name: '',
   components: {},
   props: {
-    artItem: [] // 文章数据
+    artItem: Object // 文章对象
   },
   data() {
     return {}
@@ -63,5 +80,19 @@ export default {
   &:first-child {
     margin-left: 0;
   }
+}
+
+// 图片样式，矩形黄金比例：0.618
+.thumb {
+  width: 113px;
+  height: 70px;
+  background-color: #f8f8f8;
+  object-fit: cover;
+}
+
+// 三图，图片容器
+.thumb-box {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
