@@ -33,7 +33,7 @@
         <div>
           <span>{{ artItem.aut_name }}</span>
           <span>{{ artItem.comm_count }}评论</span>
-          <span>{{ artItem.pubdate }}个月前</span>
+          <span>{{ formatTime(artItem.pubdate) }}</span>
         </div>
         <!-- 反馈按钮 -->
         <van-icon name="cross" />
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import { timeAgo } from '@/utils/date.js'
+
 export default {
   name: '',
   components: {},
@@ -55,7 +57,9 @@ export default {
     return {}
   },
   created() {},
-  methods: {}
+  methods: {
+    formatTime: timeAgo // 函数体是timeAgo
+  }
 }
 </script>
 
