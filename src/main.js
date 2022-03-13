@@ -16,7 +16,11 @@ import {
   Cell,
   List,
   PullRefresh,
-  ActionSheet
+  ActionSheet,
+  Popup,
+  Badge,
+  Col,
+  Row
 } from 'vant'
 
 Vue.use(NavBar)
@@ -32,6 +36,10 @@ Vue.use(Cell)
 Vue.use(List)
 Vue.use(PullRefresh)
 Vue.use(ActionSheet)
+Vue.use(Popup)
+Vue.use(Badge)
+Vue.use(Col)
+Vue.use(Row)
 
 Vue.config.productionTip = false
 

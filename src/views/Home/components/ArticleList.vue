@@ -26,7 +26,7 @@
 <script>
 import ArticleItem from './ArticleItem.vue'
 import {
-  getAllArticleListAPI,
+  getAllArticlesListAPI,
   dislikeArticleAPI,
   reportArticleAPI
 } from '@/api/index.js'
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     async getArticleListFn() {
-      const res = await getAllArticleListAPI({
+      const res = await getAllArticlesListAPI({
         channel_id: this.channelId,
         timestamp: this.theTime
       })
