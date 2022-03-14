@@ -60,7 +60,7 @@ export const reportArticleAPI = ({ artId, type }) => axios({
 })
 
 export const suggestListAPI = ({ keywords }) => axios({
-  url: '/v1_0/search',
+  url: '/v1_0/suggestion',
   method: 'GET',
   params: {
     q: keywords

@@ -3,7 +3,6 @@
     <!-- 弹出层头部 -->
     <van-nav-bar title="频道管理">
       <template #right>
-        <van-icon name="cross" size="0.37333334rem" color="white" />
         <van-icon
           name="cross"
           size="0.37333334rem"
@@ -155,15 +154,15 @@ export default {
   }
 }
 
+.pop-body {
+  flex: 1;
+  overflow: scroll;
+  padding: 8px;
+  background-color: #fff;
+}
+
 .my-channel-box,
 .more-channel-box {
-  .pop-body {
-    flex: 1;
-    overflow: scroll;
-    padding: 8px;
-    background-color: #fff;
-  }
-
   .channel-title {
     display: flex;
     justify-content: space-between;

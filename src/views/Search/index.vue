@@ -18,20 +18,45 @@
         background="#007bff"
         shape="round"
         @input="inputFn"
+        @search="searchFn"
       />
     </div>
     <!-- /搜索页面头部 -->
 
     <!-- 搜索建议列表 -->
-    <div class="sugg-list">
+    <div class="sugg-list" v-if="kw.length !== 0">
       <div
         class="sugg-item"
         v-for="(str, index) in suggestList"
         :key="index"
-        v-html="lightFn(str.title, kw)"
+        v-html="lightFn(str, kw)"
+        @click="suggestClickFn(str)"
       ></div>
     </div>
     <!-- /搜索建议列表 -->
+
+    <!-- 搜索历史 -->
+    <div class="search-history" v-else>
+      <!-- 标题 -->
+      <van-cell title="搜索历史">
+        <!-- 使用right-icon插槽自定义右侧图标 -->
+        <template #right-icon>
+          <van-icon name="delete" class="search-icon" @click="clearFn" />
+        </template>
+      </van-cell>
+
+      <!-- 历史列表 -->
+      <div class="history-list">
+        <span
+          class="history-item"
+          v-for="(str, index) in history"
+          :key="index"
+          @click="historyClickFn(str)"
+          >{{ str }}</span
+        >
+      </div>
+    </div>
+    <!-- /搜索历史 -->
   </div>
 </template>
 
@@ -45,7 +70,8 @@ export default {
     return {
       kw: '', // 搜索关键词
       timer: null, // 防抖的定时器
-      suggestList: [] // 联想建议列表数组
+      suggestList: [], // 联想建议列表数组
+      history: JSON.parse(localStorage.getItem('his')) || [] // 搜索历史
     }
   },
   created() {},
@@ -62,7 +88,7 @@ export default {
           const res = await suggestListAPI({
             keywords: this.kw
           })
-          this.suggestList = res.data.data.results
+          this.suggestList = res.data.data.options
         }, 300)
       }
     },
@@ -78,6 +104,54 @@ export default {
         // match就是匹配中时，原字符串的字符，添加高亮同时不会被更改大小写格式
         return `<span style="color: red">${match}</span>`
       })
+    },
+
+    moveFn(theKw) {
+      // 路由跳转在watch之前执行，所以要包裹定时器
+      setTimeout(() => {
+        this.$router.push({
+          path: `/search_result/${theKw}`
+        })
+      }, 0)
+    },
+    // 输入框-搜索事件
+    searchFn() {
+      if (this.kw.length > 0) {
+        // 搜索关键字保存到数组里
+        this.history.push(this.kw)
+        this.moveFn(this.kw)
+      }
+    },
+
+    // 联想菜单的点击事件
+    suggestClickFn(str) {
+      this.history.push(str)
+      this.moveFn(str)
+    },
+    // 历史记录点击事件
+    historyClickFn(str) {
+      this.moveFn(str)
+    },
+
+    // 清除历史记录
+    clearFn() {
+      this.history = []
+    }
+  },
+
+  watch: {
+    // 监听历史记录数组的改变
+    history: {
+      deep: true,
+      handler() {
+        // 立刻覆盖式的保存到本地
+        // set无序不重复数组
+        // 如果值是对象，比较的是对象内存地址
+        const theSet = new Set(this.history)
+        // 将set转回Array数组
+        const arr = Array.from(theSet)
+        localStorage.setItem('his', JSON.stringify(arr))
+      }
     }
   }
 }
@@ -111,6 +185,24 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+}
+
+// 搜索历史
+.search-icon {
+  font-size: 16px;
+  line-height: inherit;
+}
+
+.history-list {
+  padding: 0 10px;
+  .history-item {
+    display: inline-block;
+    font-size: 12px;
+    padding: 8px 14px;
+    background-color: #efefef;
+    margin: 10px 8px 0 8px;
+    border-radius: 10px;
   }
 }
 </style>
