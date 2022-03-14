@@ -10,7 +10,6 @@
           color="white"
           @click="closeFn"
         />
-        >>>>>>> channelEdit
       </template>
     </van-nav-bar>
     <!-- /弹出层头部 -->

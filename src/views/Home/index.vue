@@ -6,8 +6,13 @@
         <template v-slot:left>
           <img class="logo" src="@/assets/logo.png" alt="" />
         </template>
-        <template v-slot:right>
-          <van-icon name="search" size="18" color="#fff" />
+        <template #right>
+          <van-icon
+            name="search"
+            size="0.48rem"
+            color="#fff"
+            @click="moveSearchPageFn"
+          />
         </template>
       </van-nav-bar>
     </div>
@@ -156,6 +161,11 @@ export default {
       this.show = false
       // 让内部编辑状态回归false
       this.$refs.editRef.isEdit = false
+    },
+
+    // 首页-跳转搜索页
+    moveSearchPageFn() {
+      this.$router.push('/search')
     }
   },
 

@@ -20,7 +20,8 @@ import {
   Popup,
   Badge,
   Col,
-  Row
+  Row,
+  Search
 } from 'vant'
 
 Vue.use(NavBar)
@@ -40,6 +41,7 @@ Vue.use(Popup)
 Vue.use(Badge)
 Vue.use(Col)
 Vue.use(Row)
+Vue.use(Search)
 
 Vue.config.productionTip = false
 
