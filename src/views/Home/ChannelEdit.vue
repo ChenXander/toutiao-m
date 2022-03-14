@@ -3,7 +3,16 @@
     <!-- 弹出层头部 -->
     <van-nav-bar title="频道管理">
       <template #right>
+<<<<<<< HEAD
         <van-icon name="cross" size="0.37333334rem" color="white" />
+=======
+        <van-icon
+          name="cross"
+          size="0.37333334rem"
+          color="white"
+          @click="closeFn"
+        />
+>>>>>>> channelEdit
       </template>
     </van-nav-bar>
     <!-- /弹出层头部 -->
@@ -103,6 +112,14 @@ export default {
       if (this.isEdit === true) {
         this.$emit('removeChannelEV', channelObj)
       }
+<<<<<<< HEAD
+=======
+    },
+
+    // 关闭频道管理弹出层
+    closeFn() {
+      this.$emit('closeEV')
+>>>>>>> channelEdit
     }
   }
 }
