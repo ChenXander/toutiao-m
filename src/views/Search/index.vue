@@ -24,9 +24,12 @@
 
     <!-- 搜索建议列表 -->
     <div class="sugg-list">
-      <div class="sugg-item" v-for="(str, index) in suggestList" :key="index">
-        {{ str.title }}
-      </div>
+      <div
+        class="sugg-item"
+        v-for="(str, index) in suggestList"
+        :key="index"
+        v-html="lightFn(str.title, kw)"
+      ></div>
     </div>
     <!-- /搜索建议列表 -->
   </div>
@@ -62,6 +65,19 @@ export default {
           this.suggestList = res.data.data.results
         }, 300)
       }
+    },
+
+    // 处理关键字高亮
+    lightFn(originStr, target) {
+      // originStr：原来字符串
+      // target：关键字
+      const reg = new RegExp(target, 'ig') // i忽略大小写，g全局匹配
+
+      // 替换后的值不能用target，否则返回的关键字都被替换了，原有的联想建议大小写则没了
+      return originStr.replace(reg, (match) => {
+        // match就是匹配中时，原字符串的字符，添加高亮同时不会被更改大小写格式
+        return `<span style="color: red">${match}</span>`
+      })
     }
   }
 }
