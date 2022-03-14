@@ -51,8 +51,8 @@
             <span>{{ artItem.comm_count }}评论</span>
             <span>{{ formatTime(artItem.pubdate) }}</span>
           </div>
-          <!-- 反馈按钮 -->
-          <van-icon name="cross" @click="show = true" v-if="isShow" />
+          <!-- 反馈按钮,  stop阻止事件冒泡 -->
+          <van-icon name="cross" @click.stop="show = true" v-if="isShow" />
         </div>
       </template>
       <!-- /label区域插槽 -->

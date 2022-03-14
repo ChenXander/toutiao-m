@@ -11,11 +11,12 @@
       >
         <!-- 文章列表 -->
         <ArticleItem
-          v-for="item in list"
-          :key="item.art_id"
-          :artItem="item"
+          v-for="obj in list"
+          :key="obj.art_id"
+          :artItem="obj"
           @disLikeEV="dislikeFn"
           @reportEV="reportFn"
+          @click.native="itemClickFn(obj.art_id)"
         ></ArticleItem>
         <!-- /文章列表 -->
       </van-list>
@@ -104,6 +105,13 @@ export default {
         type: value
       })
       Notify({ type: 'success', message: '举报成功' })
+    },
+
+    // 文章单元格点击事件
+    itemClickFn(id) {
+      this.$router.push({
+        path: `/detail?art_id=${id}`
+      })
     }
   }
 }

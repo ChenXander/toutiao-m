@@ -12,17 +12,33 @@
     <!-- 文章信息区域 -->
     <div class="article-container">
       <!-- 文章标题 -->
-      <h1 class="art-title">小程序</h1>
+      <h1 class="art-title">{{ artObj.title }}</h1>
 
       <!-- 用户信息 -->
-      <van-cell center title="张三" label="3天前">
+      <van-cell
+        center
+        :title="artObj.aut_name"
+        :label="formatDate(artObj.pubdate)"
+      >
         <template #icon>
-          <img src="" alt="" class="avatar" />
+          <img :src="artObj.aut_photo" alt="" class="avatar" />
         </template>
         <template #default>
           <div>
-            <van-button type="info" size="mini">已关注</van-button>
-            <van-button icon="plus" type="info" size="mini" plain
+            <van-button
+              type="info"
+              size="mini"
+              v-if="artObj.is_followed === true"
+              @click="followedFm(true)"
+              >已关注</van-button
+            >
+            <van-button
+              icon="plus"
+              type="info"
+              size="mini"
+              plain
+              v-else
+              @click="followedFm(false)"
               >关注</van-button
             >
           </div>
@@ -35,7 +51,7 @@
       <!-- /分割线 -->
 
       <!-- 文章内容 -->
-      <div class="art-content">好好学习，天天向上</div>
+      <div class="art-content" v-html="artObj.content"></div>
       <!-- /文章内容 -->
 
       <!-- 分割线 -->
@@ -43,29 +59,107 @@
       <!-- /分割线 -->
 
       <!-- 点赞 -->
+      <!-- attitude：-1：无态度，0：不喜欢，1：点赞 -->
       <div class="like-box">
-        <van-button icon="good-job" type="danger" size="small"
+        <van-button
+          icon="good-job"
+          type="danger"
+          size="small"
+          v-if="artObj.attitude === 1"
+          @click="loveFn(true)"
           >已点赞</van-button
         >
-        <van-button icon="good-job-o" type="danger" size="small" plain
+        <van-button
+          icon="good-job-o"
+          type="danger"
+          size="small"
+          plain
+          v-else
+          @click="loveFn(false)"
           >点赞</van-button
         >
       </div>
       <!-- /点赞 -->
     </div>
     <!-- /文章信息区域 -->
+
+    <!-- 文章评论 -->
+    <div>
+      <CommentList></CommentList>
+    </div>
+    <!-- /文章评论 -->
   </div>
 </template>
 
 <script>
+import {
+  detailAPI,
+  userFollowedAPI,
+  userUnFollowedAPI,
+  likeArticleAPI,
+  unLikeArticleAPI
+} from '@/api'
+import { timeAgo } from '@/utils/date.js'
+import CommentList from './CommentList.vue'
+
 export default {
   name: '',
-  components: {},
+  components: { CommentList },
   data() {
-    return {}
+    return {
+      artObj: {} // 文章对象
+    }
   },
-  created() {},
-  methods: {}
+  async created() {
+    const res = await detailAPI({
+      artId: this.$route.query.art_id
+    })
+    this.artObj = res.data.data
+  },
+  methods: {
+    formatDate: timeAgo,
+
+    // 关注/取关
+    async followedFm(bool) {
+      if (bool === true) {
+        // 用户点在了已关注按钮，目的是取关，所以调用取关接口，页面显示关注按钮
+        this.artObj.is_followed = false
+
+        const res = await userUnFollowedAPI({
+          userId: this.artObj.aut_id
+        })
+        console.log(res)
+      } else {
+        // 用户点在了关注按钮，目的是关注，所以调用关注接口，页面显示已关注按钮
+        this.artObj.is_followed = true
+
+        const res = await userFollowedAPI({
+          userId: this.artObj.aut_id
+        })
+        console.log(res)
+      }
+    },
+
+    // 点赞/取消点赞
+    async loveFn(bool) {
+      if (bool === true) {
+        // 取消点赞
+        this.artObj.attitude = 0 // 0不喜欢，-1无态度
+
+        const res = await unLikeArticleAPI({
+          artId: this.artObj.art_id
+        })
+        console.log(res)
+      } else {
+        this.artObj.attitude = 1
+
+        const res = await likeArticleAPI({
+          artId: this.artObj.art_id
+        })
+        console.log(res)
+      }
+    }
+  }
 }
 </script>
 

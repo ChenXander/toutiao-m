@@ -78,6 +78,26 @@ export const searchResultAPI = ({ page = 1, per_page = 10, q }) => axios({
     q
   }
 })
+// 获取文章详情
+export const detailAPI = ({ artId }) => axios({
+  url: `/v1_0/articles/${artId}`,
+  method: 'GET'
+})
+
+// 文章点赞
+export const likeArticleAPI = ({ artId }) => axios({
+  url: '/v1_0/article/likings',
+  method: 'POST',
+  data: {
+    target: artId
+  }
+})
+
+// 文章取消点赞
+export const unLikeArticleAPI = ({ artId }) => axios({
+  url: `/v1_0/article/likings/${artId}`,
+  method: 'DELETE'
+})
 
 // 登录接口
 export const loginAPI = ({ mobile, code }) => axios({
@@ -87,4 +107,18 @@ export const loginAPI = ({ mobile, code }) => axios({
     mobile,
     code
   }
+})
+
+// 关注用户
+export const userFollowedAPI = ({ userId }) => axios({
+  url: '/v1_0/user/followings',
+  method: 'POST',
+  data: {
+    target: userId
+  }
+})
+// 取消关注
+export const userUnFollowedAPI = ({ userId }) => axios({
+  url: `/v1_0/user/followings/${userId}`,
+  method: 'DELETE'
 })

@@ -21,11 +21,13 @@
         @load="onLoad"
         :immediate-check="false"
       >
+        <!-- 事件修饰符native：给组件内根标签绑定原生click点击事件 -->
         <ArticleItem
           v-for="obj in articleList"
           :key="obj.art_id"
           :artItem="obj"
           :isShow="false"
+          @click.native="itemClickFn(obj.art_id)"
         ></ArticleItem>
       </van-list>
     </div>
@@ -71,6 +73,13 @@ export default {
 
         this.loading = false
       }
+    },
+
+    // 跳转文章详情
+    itemClickFn(id) {
+      this.$router.push({
+        path: `/detail?art_id=${id}`
+      })
     }
   }
 }
