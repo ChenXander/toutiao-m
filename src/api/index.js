@@ -59,6 +59,14 @@ export const reportArticleAPI = ({ artId, type }) => axios({
   }
 })
 
+export const suggestListAPI = ({ keywords }) => axios({
+  url: '/v1_0/search',
+  method: 'GET',
+  params: {
+    q: keywords
+  }
+})
+
 // 登录接口
 export const loginAPI = ({ mobile, code }) => axios({
   url: '/v1_0/authorizations',
