@@ -151,6 +151,8 @@ export default {
         channelId: channelObj.id
       })
       console.log(res)
+<<<<<<< HEAD
+=======
     },
 
     // 关闭弹出层
@@ -158,6 +160,7 @@ export default {
       this.show = false
       // 让内部编辑状态回归false
       this.$refs.editRef.isEdit = false
+>>>>>>> channelEdit
     }
   },
 
