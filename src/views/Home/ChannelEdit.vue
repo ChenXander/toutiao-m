@@ -108,7 +108,16 @@ export default {
     userChannelClickFn(channelObj) {
       // 处于编辑状态 -> 执行删除功能
       if (this.isEdit === true) {
-        this.$emit('removeChannelEV', channelObj)
+        if (channelObj.id !== 0) {
+          // 推荐频道不能删除，但是不能和上面写在一起
+          // 否则点击推荐频道就变成进入频道了，所以要在外面if，再进来判断
+          this.$emit('removeChannelEV', channelObj)
+        }
+      } else {
+        // 切换频道
+        this.$emit('closeEV') // 关闭弹出层
+        // 触发v-model绑定的input事件，把值传出去绑定给v-model对应的vue变量
+        this.$emit('input', channelObj.id)
       }
     },
 

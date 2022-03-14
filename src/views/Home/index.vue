@@ -52,6 +52,7 @@
         @removeChannelEV="removeChannelFn"
         @closeEV="closeFn"
         ref="editRef"
+        v-model="channelId"
       ></ChannelEdit>
     </van-popup>
     <!-- /频道管理弹出层 -->
