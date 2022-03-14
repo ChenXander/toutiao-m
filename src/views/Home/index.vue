@@ -50,6 +50,8 @@
         :unCheckList="unCheckChannelList"
         @addChannelEV="addChannelFn"
         @removeChannelEV="removeChannelFn"
+        @closeEV="closeFn"
+        ref="editRef"
       ></ChannelEdit>
     </van-popup>
     <!-- /频道管理弹出层 -->
@@ -146,6 +148,13 @@ export default {
         channelId: channelObj.id
       })
       console.log(res)
+    },
+
+    // 关闭弹出层
+    closeFn() {
+      this.show = false
+      // 让内部编辑状态回归false
+      this.$refs.editRef.isEdit = false
     }
   },
 
