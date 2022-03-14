@@ -12,6 +12,7 @@
       />
       <!-- 搜索组件 -->
       <van-search
+        v-fofo
         placeholder="请输入搜索关键词"
         background="#007bff"
         shape="round"
