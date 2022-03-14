@@ -22,7 +22,8 @@ import {
   Col,
   Row,
   Search,
-  Image as VanImage
+  Image as VanImage,
+  Divider
 } from 'vant'
 
 Vue.use(NavBar)
@@ -44,6 +45,7 @@ Vue.use(Col)
 Vue.use(Row)
 Vue.use(Search)
 Vue.use(VanImage)
+Vue.use(Divider)
 
 Vue.config.productionTip = false
 

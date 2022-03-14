@@ -6,6 +6,7 @@ import Home from '@/views/Home'
 import User from '@/views/User'
 import Search from '@/views/Search'
 import SearchResult from '@/views/Search/SearchResult'
+import ArticleDetail from '@/views/ArticleDetail'
 
 Vue.use(VueRouter)
 
@@ -40,6 +41,11 @@ const routes = [
   { // 搜索结果
     path: '/search_result/:kw',
     component: SearchResult
+  },
+  // 文章详情页
+  {
+    path: '/detail',
+    component: ArticleDetail
   }
 ]
 
