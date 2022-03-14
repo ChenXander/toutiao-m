@@ -100,10 +100,12 @@ export default {
       const reg = new RegExp(target, 'ig') // i忽略大小写，g全局匹配
 
       // 替换后的值不能用target，否则返回的关键字都被替换了，原有的联想建议大小写则没了
-      return originStr.replace(reg, (match) => {
-        // match就是匹配中时，原字符串的字符，添加高亮同时不会被更改大小写格式
-        return `<span style="color: red">${match}</span>`
-      })
+      if (originStr) {
+        return originStr.replace(reg, (match) => {
+          // match就是匹配中时，原字符串的字符，添加高亮同时不会被更改大小写格式
+          return `<span style="color: red">${match}</span>`
+        })
+      }
     },
 
     moveFn(theKw) {

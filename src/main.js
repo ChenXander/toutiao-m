@@ -21,7 +21,8 @@ import {
   Badge,
   Col,
   Row,
-  Search
+  Search,
+  Image as VanImage
 } from 'vant'
 
 Vue.use(NavBar)
@@ -42,6 +43,7 @@ Vue.use(Badge)
 Vue.use(Col)
 Vue.use(Row)
 Vue.use(Search)
+Vue.use(VanImage)
 
 Vue.config.productionTip = false
 

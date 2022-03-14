@@ -8,22 +8,37 @@
           <!-- 标题 -->
           <span>{{ artItem.title }}</span>
           <!-- 单图 -->
-          <img
+          <!-- <img
             class="thumb"
             v-if="artItem.cover.type === 1"
             :src="artItem.cover.images[0]"
             alt=""
-          />
+          /> -->
+          <van-image
+            class="thumb"
+            v-if="artItem.cover.type === 1"
+            :src="artItem.cover.images[0]"
+          >
+            <template v-slot:error>图片走丢了</template>
+          </van-image>
         </div>
         <!-- 多图 -->
         <div class="thumb-box" v-if="artItem.cover.type > 1">
-          <img
+          <!-- <img
             class="thumb"
             v-for="(imgUrl, index) in artItem.cover.images"
             :key="index"
             :src="imgUrl"
             alt=""
-          />
+          /> -->
+          <van-image
+            class="thumb"
+            v-for="(imgUrl, index) in artItem.cover.images"
+            :key="index"
+            :src="imgUrl"
+          >
+            <template v-slot:error>图片走丢了</template>
+          </van-image>
         </div>
       </template>
       <!-- /标题区的插槽 -->
@@ -37,7 +52,7 @@
             <span>{{ formatTime(artItem.pubdate) }}</span>
           </div>
           <!-- 反馈按钮 -->
-          <van-icon name="cross" @click="show = true" />
+          <van-icon name="cross" @click="show = true" v-if="isShow" />
         </div>
       </template>
       <!-- /label区域插槽 -->
@@ -66,7 +81,11 @@ export default {
   name: '',
   components: {},
   props: {
-    artItem: Object // 文章对象
+    artItem: Object, // 文章对象
+    isShow: {
+      type: Boolean,
+      default: true // 首页默认需要显示反馈面板
+    }
   },
   data() {
     return {

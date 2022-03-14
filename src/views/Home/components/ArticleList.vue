@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import ArticleItem from './ArticleItem.vue'
+import ArticleItem from '../../../components/ArticleItem.vue'
 import {
   getAllArticlesListAPI,
   dislikeArticleAPI,

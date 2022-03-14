@@ -59,11 +59,23 @@ export const reportArticleAPI = ({ artId, type }) => axios({
   }
 })
 
+// 搜索-联想菜单列表
 export const suggestListAPI = ({ keywords }) => axios({
   url: '/v1_0/suggestion',
   method: 'GET',
   params: {
     q: keywords
+  }
+})
+
+// 搜索-搜索结果列表
+export const searchResultAPI = ({ page = 1, per_page = 10, q }) => axios({
+  url: '/v1_0/search',
+  method: 'GET',
+  params: {
+    page,
+    per_page,
+    q
   }
 })
 
