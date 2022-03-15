@@ -8,45 +8,53 @@
         'art-cmt-container-2': !isShowCmtBox
       }"
     >
-      <!-- 评论的item项 -->
-      <div class="cmt-item" v-for="obj in commentArr" :key="obj.com_id">
-        <!-- 头部区域 -->
-        <div class="cmt-header">
-          <!-- 头部左侧 -->
-          <div class="cmt-header-left">
-            <img :src="obj.aut_photo" alt="" class="avatar" />
-            <span class="uname">{{ obj.aut_name }}</span>
-          </div>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多评论了，请发表评论"
+        @load="onLoad"
+        :immediate-check="false"
+      >
+        <!-- 评论的item项 -->
+        <div class="cmt-item" v-for="obj in commentArr" :key="obj.com_id">
+          <!-- 头部区域 -->
+          <div class="cmt-header">
+            <!-- 头部左侧 -->
+            <div class="cmt-header-left">
+              <img :src="obj.aut_photo" alt="" class="avatar" />
+              <span class="uname">{{ obj.aut_name }}</span>
+            </div>
 
-          <!-- 头部右侧 -->
-          <div class="cmt-header-right">
-            <van-icon
-              name="like"
-              size="16"
-              color="red"
-              v-if="obj.is_liking === true"
-              @click="likeFn(true, obj)"
-            />
-            <van-icon
-              name="like-o"
-              size="16"
-              color="grey"
-              v-else
-              @click="likeFn(false, obj)"
-            />
+            <!-- 头部右侧 -->
+            <div class="cmt-header-right">
+              <van-icon
+                name="like"
+                size="16"
+                color="red"
+                v-if="obj.is_liking === true"
+                @click="likeFn(true, obj)"
+              />
+              <van-icon
+                name="like-o"
+                size="16"
+                color="grey"
+                v-else
+                @click="likeFn(false, obj)"
+              />
+            </div>
           </div>
+          <!-- /头部区域 -->
+
+          <!-- 主体区域 -->
+          <div class="cmt-body">{{ obj.content }}</div>
+          <!-- /主体区域 -->
+
+          <!-- 尾部区域 -->
+          <div class="cmt-footer">{{ timeAgo(obj.pubdate) }}</div>
+          <!-- /尾部区域 -->
         </div>
-        <!-- /头部区域 -->
-
-        <!-- 主体区域 -->
-        <div class="cmt-body">{{ obj.content }}</div>
-        <!-- /主体区域 -->
-
-        <!-- 尾部区域 -->
-        <div class="cmt-footer">{{ timeAgo(obj.pubdate) }}</div>
-        <!-- /尾部区域 -->
-      </div>
-      <!-- /评论的item项 -->
+        <!-- /评论的item项 -->
+      </van-list>
     </div>
     <!-- /评论列表 -->
 
@@ -106,7 +114,10 @@ export default {
       commentArr: [], // 评论列表
       totalCount: 0, // 评论总数量(后台返回)
       isShowCmtBox: true, // 默认显示第一套评论容器
-      comText: '' // 发布评论的内容
+      comText: '', // 发布评论的内容
+      loading: false,
+      finished: false,
+      lastId: null // 最后一条评论的id用作分页
     }
   },
   async created() {
@@ -115,6 +126,7 @@ export default {
     })
     this.commentArr = res.data.data.results // 评论数据
     this.totalCount = res.data.data.total_count // 评论总数
+    this.lastId = res.data.data.last_id
   },
   methods: {
     timeAgo,
@@ -180,6 +192,28 @@ export default {
       setTimeout(() => {
         this.isShowCmtBox = true
       })
+    },
+
+    // 底部加载更多
+    async onLoad() {
+      if (this.commentArr.length > 0) {
+        // 请求下一页数据
+        const res = await commentsListAPI({
+          id: this.$route.query.art_id, // 文章id
+          offset: this.lastId
+        })
+        this.commentArr = [...this.commentArr, ...res.data.data.results] // 评论数据
+        this.totalCount = res.data.data.total_count // 评论总数
+        this.lastId = res.data.data.last_id
+
+        if (res.data.data.last_id === null) {
+          // 没有下一页
+          this.finished = true
+        }
+        this.loading = false
+      } else {
+        this.loading = false
+      }
     }
   }
 }
