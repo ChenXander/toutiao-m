@@ -146,17 +146,15 @@ export default {
         // 取消点赞
         this.artObj.attitude = 0 // 0不喜欢，-1无态度
 
-        const res = await unLikeArticleAPI({
+        await unLikeArticleAPI({
           artId: this.artObj.art_id
         })
-        console.log(res)
       } else {
         this.artObj.attitude = 1
 
-        const res = await likeArticleAPI({
+        await likeArticleAPI({
           artId: this.artObj.art_id
         })
-        console.log(res)
       }
     }
   }

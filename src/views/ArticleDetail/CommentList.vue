@@ -1,7 +1,13 @@
 <template>
   <div>
     <!-- 评论列表 -->
-    <div class="cmt-list">
+    <div
+      class="cmt-list"
+      :class="{
+        'art-cmt-container-1': isShowCmtBox,
+        'art-cmt-container-2': !isShowCmtBox
+      }"
+    >
       <!-- 评论的item项 -->
       <div class="cmt-item" v-for="obj in commentArr" :key="obj.com_id">
         <!-- 头部区域 -->
@@ -43,6 +49,32 @@
       <!-- /评论的item项 -->
     </div>
     <!-- /评论列表 -->
+
+    <!-- 发表评论-区域1 -->
+    <div class="add-cmt-box van-hairline--top" v-if="isShowCmtBox === true">
+      <van-icon name="arrow-left" size="0.48rem" @click="$router.back()" />
+      <div class="ipt-cmt-div" @click="toggleShowFn">发表评论</div>
+      <div class="icon-box">
+        <van-badge :content="totalCount === 0 ? '' : totalCount" max="99">
+          <van-icon name="comment-o" size="0.53333334rem" />
+        </van-badge>
+        <van-icon name="star-o" size="0.53333334rem" />
+        <van-icon name="share-o" size="0.53333334rem" />
+      </div>
+    </div>
+    <!-- /发表评论-区域1 -->
+
+    <!-- 发表评论-区域2 -->
+    <div class="cmt-box van-hairline--top" v-else>
+      <!-- v-fofo 全局自定义自动聚焦指令 -->
+      <textarea
+        placeholder="友善评论、理性发言、阳光心灵"
+        v-fofo
+        @blur="isShowCmtBox = true"
+      ></textarea>
+      <van-button type="default" disabled>发布</van-button>
+    </div>
+    <!-- /发表评论-区域2 -->
   </div>
 </template>
 
@@ -56,14 +88,17 @@ export default {
   data() {
     return {
       offset: null, // 偏移量评论ID
-      commentArr: [] // 评论列表
+      commentArr: [], // 评论列表
+      totalCount: 0, // 评论总数量(后台返回)
+      isShowCmtBox: true // 默认显示第一套评论容器
     }
   },
   async created() {
     const res = await commentsListAPI({
       id: this.$route.query.art_id // 文章id
     })
-    this.commentArr = res.data.data.results
+    this.commentArr = res.data.data.results // 评论数据
+    this.totalCount = res.data.data.total_count // 评论总数
   },
   methods: {
     timeAgo,
@@ -83,6 +118,11 @@ export default {
           comId: commentObj.com_id
         })
       }
+    },
+
+    // 显示第二套评论输入框
+    toggleShowFn() {
+      this.isShowCmtBox = false
     }
   }
 }
@@ -127,6 +167,83 @@ export default {
       color: gray;
       margin-top: 10px;
     }
+  }
+}
+
+// 发表评论
+.art-cmt-container-1 {
+  padding-bottom: 46px;
+}
+
+.art-cmt-container-2 {
+  padding-bottom: 80px;
+}
+
+// 发布评论的盒子-1
+.add-cmt-box {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 46px;
+  line-height: 46px;
+  padding-left: 10px;
+  .ipt-cmt-div {
+    flex: 1;
+    border: 1px solid #efefef;
+    border-radius: 15px;
+    height: 30px;
+    font-size: 12px;
+    line-height: 30px;
+    padding-left: 15px;
+    margin-left: 10px;
+    background-color: #f8f8f8;
+  }
+  .icon-box {
+    width: 40%;
+    display: flex;
+    justify-content: space-evenly;
+    line-height: 0;
+  }
+}
+
+.child {
+  width: 20px;
+  height: 20px;
+  background: #f2f3f5;
+}
+
+// 发布评论的盒子-2
+.cmt-box {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding-left: 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+  textarea {
+    flex: 1;
+    height: 66%;
+    border: 1px solid #efefef;
+    background-color: #f8f8f8;
+    resize: none;
+    border-radius: 6px;
+    padding: 5px;
+  }
+  .van-button {
+    height: 100%;
+    border: none;
   }
 }
 </style>
