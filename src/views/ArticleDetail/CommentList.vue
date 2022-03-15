@@ -74,16 +74,27 @@
       <textarea
         placeholder="友善评论、理性发言、阳光心灵"
         v-fofo
-        @blur="isShowCmtBox = true"
+        @blur="blurFn"
+        v-model.trim="comText"
       ></textarea>
-      <van-button type="default" disabled>发布</van-button>
+      <van-button
+        type="default"
+        :disabled="comText.length === 0"
+        @click="sendFn"
+        >发布</van-button
+      >
     </div>
     <!-- /发表评论-区域2 -->
   </div>
 </template>
 
 <script>
-import { commentsListAPI, commentLikingAPI, commentDisLikingAPI } from '@/api'
+import {
+  commentsListAPI,
+  commentLikingAPI,
+  commentDisLikingAPI,
+  commentSendAPI
+} from '@/api'
 import { timeAgo } from '@/utils/date.js'
 
 export default {
@@ -94,7 +105,8 @@ export default {
       offset: null, // 偏移量评论ID
       commentArr: [], // 评论列表
       totalCount: 0, // 评论总数量(后台返回)
-      isShowCmtBox: true // 默认显示第一套评论容器
+      isShowCmtBox: true, // 默认显示第一套评论容器
+      comText: '' // 发布评论的内容
     }
   },
   async created() {
@@ -146,6 +158,27 @@ export default {
       // 注意：可能存在兼容性问题，可能会在某些平台没有动画效果
       document.querySelector('.like-box').scrollIntoView({
         behavior: 'smooth'
+      })
+    },
+
+    // 发布评论按钮的点击事件
+    async sendFn() {
+      // 前端效果：把评论加入到列表里
+      const res = await commentSendAPI({
+        id: this.$route.query.art_id,
+        content: this.comText
+      })
+      this.commentArr.unshift(res.data.data.new_obj)
+    },
+
+    // 评论输入框-失去焦点
+    blurFn() {
+      // 问题：点击发布按钮，发现点击事件不执行-排除代码问题
+      // 原因：评论区域2在页面点击发布一瞬间，输入框失去了焦点，
+      // 被v-if和v-else移除了整个标签导致点击事件没来得及执行
+      // 解决：失去焦点时，变量值最后再执行改变
+      setTimeout(() => {
+        this.isShowCmtBox = true
       })
     }
   }

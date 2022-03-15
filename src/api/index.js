@@ -111,6 +111,28 @@ export const commentsListAPI = ({ id, offset = null, limit = 10 }) => axios({
   }
 })
 
+// 文章评论-发布评论
+export const commentSendAPI = ({ id, content, art_id = null }) => {
+  // 1.axios中data请求体传参，如果值为null是不会忽略这个参数
+  // 也会把参数名和值携带后台(只有parmas遇到null会忽略)
+  // 2.形参art_id可选参数，如果逻辑页面是对文章评论，则不需要传递art_id
+  // 所以这时，内部art_id值为null就证明此次调用是针对文章评论
+
+  // data请求体对象需要自己处理
+  const obj = {
+    target: id,
+    content
+  }
+  if (art_id !== null) { // 如果本次有第三个参数，证明是对评论进行回复，否则是对文章回复
+    obj.art_id = art_id
+  }
+  return axios({
+    url: '/v1_0/comments',
+    method: 'POST',
+    data: obj
+  })
+}
+
 // 文章评论点赞
 export const commentLikingAPI = ({ comId }) => axios({
   url: '/v1_0/comment/likings',
