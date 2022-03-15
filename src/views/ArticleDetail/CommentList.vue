@@ -56,7 +56,11 @@
       <div class="ipt-cmt-div" @click="toggleShowFn">发表评论</div>
       <div class="icon-box">
         <van-badge :content="totalCount === 0 ? '' : totalCount" max="99">
-          <van-icon name="comment-o" size="0.53333334rem" />
+          <van-icon
+            name="comment-o"
+            size="0.53333334rem"
+            @click="commentClickFn"
+          />
         </van-badge>
         <van-icon name="star-o" size="0.53333334rem" />
         <van-icon name="share-o" size="0.53333334rem" />
@@ -123,6 +127,26 @@ export default {
     // 显示第二套评论输入框
     toggleShowFn() {
       this.isShowCmtBox = false
+    },
+
+    // 评论按钮的点击事件
+    commentClickFn() {
+      // 只要设置window.scrollTo(0,文章内容高度)
+      // JS代码是在html+css运行后，真实代码已经在网页上了，从document往下获取标签时ok的
+      /*  const articleHeight =
+        document.querySelector('.article-container').scrollHeight
+         window.scrollTo()使网页进行滚动，设置相应的坐标，就可以让网页滚动到屏幕的最顶端
+         如果底下没有内容了，则不再滚动
+      window.scrollTo(0, articleHeight) */
+
+      // css可以做动画：轮播图，css3位移，旋转，动画(必须修改css属性才能触发css动画)
+      // js也可以做动画：滚动条滚动,使用：计时器间隔时间，修改目标状态
+
+      // 比较方便的方法：scrollIntoView()既能滚动也能带动画，能让原生标签滚动到屏幕的最上面
+      // 注意：可能存在兼容性问题，可能会在某些平台没有动画效果
+      document.querySelector('.like-box').scrollIntoView({
+        behavior: 'smooth'
+      })
     }
   }
 }
