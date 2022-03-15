@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       user: {
-        mobile: '13866666666',
+        mobile: '13861766176',
         code: '246810'
       },
       isLoading: false // 登录按钮加载状态的显示隐藏

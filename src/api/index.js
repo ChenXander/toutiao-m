@@ -99,6 +99,33 @@ export const unLikeArticleAPI = ({ artId }) => axios({
   method: 'DELETE'
 })
 
+// 文章评论列表
+export const commentsListAPI = ({ id, offset = null, limit = 10 }) => axios({
+  url: '/v1_0/comments',
+  method: 'GET',
+  params: { // axios只针对params参数，如果发现键值对，值为null，会忽略此参数名和值不携带在url?后面
+    type: 'a', // 如果值会变化则不选择固定值，由外面传值进来
+    source: id,
+    offset,
+    limit
+  }
+})
+
+// 文章评论点赞
+export const commentLikingAPI = ({ comId }) => axios({
+  url: '/v1_0/comment/likings',
+  method: 'POST',
+  data: {
+    target: comId
+  }
+})
+
+// 文章评论取消点赞
+export const commentDisLikingAPI = ({ comId }) => axios({
+  url: `/v1_0/comment/likings/${comId}`,
+  method: 'DELETE'
+})
+
 // 登录接口
 export const loginAPI = ({ mobile, code }) => axios({
   url: '/v1_0/authorizations',

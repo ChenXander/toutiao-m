@@ -3,29 +3,41 @@
     <!-- 评论列表 -->
     <div class="cmt-list">
       <!-- 评论的item项 -->
-      <div class="cmt-item">
+      <div class="cmt-item" v-for="obj in commentArr" :key="obj.com_id">
         <!-- 头部区域 -->
         <div class="cmt-header">
           <!-- 头部左侧 -->
           <div class="cmt-header-left">
-            <img src="" alt="" class="avatar" />
-            <span class="uname">zs</span>
+            <img :src="obj.aut_photo" alt="" class="avatar" />
+            <span class="uname">{{ obj.aut_name }}</span>
           </div>
 
           <!-- 头部右侧 -->
           <div class="cmt-header-right">
-            <van-icon name="like" size="16" color="red" />
-            <van-icon name="like-o" size="16" color="grey" />
+            <van-icon
+              name="like"
+              size="16"
+              color="red"
+              v-if="obj.is_liking === true"
+              @click="likeFn(true, obj)"
+            />
+            <van-icon
+              name="like-o"
+              size="16"
+              color="grey"
+              v-else
+              @click="likeFn(false, obj)"
+            />
           </div>
         </div>
         <!-- /头部区域 -->
 
         <!-- 主体区域 -->
-        <div class="cmt-body">给予it大发放看回放哈哈发客户奋达科技</div>
+        <div class="cmt-body">{{ obj.content }}</div>
         <!-- /主体区域 -->
 
         <!-- 尾部区域 -->
-        <div class="cmt-footer">3天前</div>
+        <div class="cmt-footer">{{ timeAgo(obj.pubdate) }}</div>
         <!-- /尾部区域 -->
       </div>
       <!-- /评论的item项 -->
@@ -35,14 +47,44 @@
 </template>
 
 <script>
+import { commentsListAPI, commentLikingAPI, commentDisLikingAPI } from '@/api'
+import { timeAgo } from '@/utils/date.js'
+
 export default {
   name: '',
   components: {},
   data() {
-    return {}
+    return {
+      offset: null, // 偏移量评论ID
+      commentArr: [] // 评论列表
+    }
   },
-  created() {},
-  methods: {}
+  async created() {
+    const res = await commentsListAPI({
+      id: this.$route.query.art_id // 文章id
+    })
+    this.commentArr = res.data.data.results
+  },
+  methods: {
+    timeAgo,
+
+    // 评论点赞
+    async likeFn(bool, commentObj) {
+      if (bool) {
+        // 用户取消点赞
+        commentObj.is_liking = false
+        await commentDisLikingAPI({
+          comId: commentObj.com_id
+        })
+      } else {
+        // 用户点赞
+        commentObj.is_liking = true
+        await commentLikingAPI({
+          comId: commentObj.com_id
+        })
+      }
+    }
+  }
 }
 </script>
 
