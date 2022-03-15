@@ -1,6 +1,8 @@
 <template>
   <div>
     <!-- 评论列表 -->
+    <!-- 1.van-list最好在这个div内，让底部文字/加载中，作为此div内容，
+    容器padding-bottom底部文字也挤上去了，看得见 -->
     <div
       class="cmt-list"
       :class="{
@@ -8,6 +10,10 @@
         'art-cmt-container-2': !isShowCmtBox
       }"
     >
+      <!-- 2.van-list包裹列表，组件内源码，检测网页滚动事件，判断滚动位置是否快到达内容高度(触底)
+      loading为true->底部加载中文字出现->内部加载中文字出现->内部认为现在处于加载中状态 -->
+
+      <!-- 3.immediate-check让list组件不要上来就检查是否触底 -->
       <van-list
         v-model="loading"
         :finished="finished"
@@ -70,7 +76,19 @@
             @click="commentClickFn"
           />
         </van-badge>
-        <van-icon name="star-o" size="0.53333334rem" />
+        <van-icon
+          name="star-o"
+          color="red"
+          size="0.53333334rem"
+          @click="articleCollectFn(true, artObj)"
+          v-if="artObj.is_collected === true"
+        />
+        <van-icon
+          name="star-o"
+          size="0.53333334rem"
+          v-else
+          @click="articleCollectFn(false, artObj)"
+        />
         <van-icon name="share-o" size="0.53333334rem" />
       </div>
     </div>
@@ -101,13 +119,20 @@ import {
   commentsListAPI,
   commentLikingAPI,
   commentDisLikingAPI,
-  commentSendAPI
+  commentSendAPI,
+  articleCollectionAPI,
+  articleDisCollectionAPI
 } from '@/api'
 import { timeAgo } from '@/utils/date.js'
 
 export default {
   name: '',
   components: {},
+  props: {
+    artObj: {
+      type: Object
+    } // 文章对象
+  },
   data() {
     return {
       offset: null, // 偏移量评论ID
@@ -127,6 +152,11 @@ export default {
     this.commentArr = res.data.data.results // 评论数据
     this.totalCount = res.data.data.total_count // 评论总数
     this.lastId = res.data.data.last_id
+
+    // 网页打开->没有评论，res是空数组,让list组件直接显示没有更多评论的底部文字
+    if (res.data.data.results.length === 0) {
+      this.finished = true
+    }
   },
   methods: {
     timeAgo,
@@ -181,6 +211,9 @@ export default {
         content: this.comText
       })
       this.commentArr.unshift(res.data.data.new_obj)
+      this.totalCount++ // 发布评论，计数自增
+      this.comText = '' // 清空输入框
+      this.commentClickFn() // 让第一条评论滚到到屏幕上
     },
 
     // 评论输入框-失去焦点
@@ -196,6 +229,10 @@ export default {
 
     // 底部加载更多
     async onLoad() {
+      // 这里判断和immediate-check任选一个，所以这里可以不写，但是immediate-check
+      // 是内部不进行判断，监听滚动的事件还在，第一个频道滚到到底再切换第二个频道的时候(新建-内容没有那么高)，
+      // 滚动会从底部滚动回顶部，这时滚动事件触发了，immediate-check判断会无效
+      // 如果想要万无一失，这里判断还是加上，双重保险
       if (this.commentArr.length > 0) {
         // 请求下一页数据
         const res = await commentsListAPI({
@@ -213,6 +250,23 @@ export default {
         this.loading = false
       } else {
         this.loading = false
+      }
+    },
+
+    // 文章收藏
+    async articleCollectFn(bool, artObj) {
+      if (bool) {
+        // 用户取消收藏
+        artObj.is_collected = false
+        await articleDisCollectionAPI({
+          artId: artObj.art_id
+        })
+      } else {
+        // 用户点赞
+        artObj.is_collected = true
+        await articleCollectionAPI({
+          artId: artObj.art_id
+        })
       }
     }
   }

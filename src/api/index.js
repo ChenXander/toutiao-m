@@ -148,6 +148,21 @@ export const commentDisLikingAPI = ({ comId }) => axios({
   method: 'DELETE'
 })
 
+// 文章收藏
+export const articleCollectionAPI = ({ artId }) => axios({
+  url: '/v1_0/article/collections',
+  method: 'POST',
+  data: {
+    target: artId
+  }
+})
+
+// 文章取消收藏
+export const articleDisCollectionAPI = ({ artId }) => axios({
+  url: `/v1_0/article/collections/${artId}`,
+  method: 'DELETE'
+})
+
 // 登录接口
 export const loginAPI = ({ mobile, code }) => axios({
   url: '/v1_0/authorizations',

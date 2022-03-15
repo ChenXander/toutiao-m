@@ -85,7 +85,7 @@
 
     <!-- 文章评论 -->
     <div>
-      <CommentList></CommentList>
+      <CommentList :artObj="artObj"></CommentList>
     </div>
     <!-- /文章评论 -->
   </div>
@@ -125,18 +125,16 @@ export default {
         // 用户点在了已关注按钮，目的是取关，所以调用取关接口，页面显示关注按钮
         this.artObj.is_followed = false
 
-        const res = await userUnFollowedAPI({
+        await userUnFollowedAPI({
           userId: this.artObj.aut_id
         })
-        console.log(res)
       } else {
         // 用户点在了关注按钮，目的是关注，所以调用关注接口，页面显示已关注按钮
         this.artObj.is_followed = true
 
-        const res = await userFollowedAPI({
+        await userFollowedAPI({
           userId: this.artObj.aut_id
         })
-        console.log(res)
       }
     },
 
