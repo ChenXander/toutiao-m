@@ -2,7 +2,7 @@
 import theAxios from 'axios'
 import router from '@/router'
 import { Notify } from 'vant'
-import { getToken } from '@/utils/token.js'
+import { getToken, removeToken } from '@/utils/token.js'
 
 const axios = theAxios.create({
   baseURL: 'http://toutiao.itheima.net/', // 接口的基准路径
@@ -35,6 +35,7 @@ axios.interceptors.response.use(function (response) {
     // * 不能使用this.$router(因为this不是vue组件对象无法调用$router)
     // * 导入router解决
     Notify({ type: 'warning', message: '身份已过期' })
+    removeToken() // 先清除token，才能让路由守卫判断失效，放行去登录页
     router.replace('/login')
   }
 

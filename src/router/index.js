@@ -9,6 +9,7 @@ import VueRouter from 'vue-router'
 // import ArticleDetail from '@/views/ArticleDetail'
 // import UserEdit from '@/views/User/UserEdit'
 // import Chat from '@/views/Chat'
+import { getToken } from '@/utils/token.js'
 
 // 路由懒加载：为了让第一个页面加载的app.js小一点，打开网页快一点
 // 把组件对应的js分成若干个js，路由切换到哪个页面才加载对应的js文件
@@ -74,6 +75,17 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+
+// 全局前置守卫(在路由真正跳转之前，执行次函数)
+// 此函数可以决定路由是否跳转/取消/强制中断切换到别的路由
+router.beforeEach((to, from, next) => {
+  // 如果已经登录，不允许切换到登录页面
+  if (getToken()?.length > 0 && to.path === '/login') {
+    next(false)
+  } else {
+    next() // 否则放行
+  }
 })
 
 export default router
