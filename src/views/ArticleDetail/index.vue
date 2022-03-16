@@ -9,85 +9,93 @@
     />
     <!-- /Header区域 -->
 
-    <!-- 文章信息区域 -->
-    <div class="article-container">
-      <!-- 文章标题 -->
-      <h1 class="art-title">{{ artObj.title }}</h1>
+    <!-- 文章等待加载中 -->
+    <van-loading color="#1989fa" v-if="Object.keys(artObj).length === 0">
+      文章加载中...
+    </van-loading>
+    <!-- /文章等待加载中 -->
 
-      <!-- 用户信息 -->
-      <van-cell
-        center
-        :title="artObj.aut_name"
-        :label="formatDate(artObj.pubdate)"
-      >
-        <template #icon>
-          <img :src="artObj.aut_photo" alt="" class="avatar" />
-        </template>
-        <template #default>
-          <div>
-            <van-button
-              type="info"
-              size="mini"
-              v-if="artObj.is_followed === true"
-              @click="followedFm(true)"
-              >已关注</van-button
-            >
-            <van-button
-              icon="plus"
-              type="info"
-              size="mini"
-              plain
-              v-else
-              @click="followedFm(false)"
-              >关注</van-button
-            >
-          </div>
-        </template>
-      </van-cell>
-      <!-- /用户信息 -->
+    <div v-else>
+      <!-- 文章信息区域 -->
+      <div class="article-container">
+        <!-- 文章标题 -->
+        <h1 class="art-title">{{ artObj.title }}</h1>
 
-      <!-- 分割线 -->
-      <van-divider></van-divider>
-      <!-- /分割线 -->
-
-      <!-- 文章内容 -->
-      <div class="art-content" v-html="artObj.content"></div>
-      <!-- /文章内容 -->
-
-      <!-- 分割线 -->
-      <van-divider>END</van-divider>
-      <!-- /分割线 -->
-
-      <!-- 点赞 -->
-      <!-- attitude：-1：无态度，0：不喜欢，1：点赞 -->
-      <div class="like-box">
-        <van-button
-          icon="good-job"
-          type="danger"
-          size="small"
-          v-if="artObj.attitude === 1"
-          @click="loveFn(true)"
-          >已点赞</van-button
+        <!-- 用户信息 -->
+        <van-cell
+          center
+          :title="artObj.aut_name"
+          :label="formatDate(artObj.pubdate)"
         >
-        <van-button
-          icon="good-job-o"
-          type="danger"
-          size="small"
-          plain
-          v-else
-          @click="loveFn(false)"
-          >点赞</van-button
-        >
+          <template #icon>
+            <img :src="artObj.aut_photo" alt="" class="avatar" />
+          </template>
+          <template #default>
+            <div>
+              <van-button
+                type="info"
+                size="mini"
+                v-if="artObj.is_followed === true"
+                @click="followedFm(true)"
+                >已关注</van-button
+              >
+              <van-button
+                icon="plus"
+                type="info"
+                size="mini"
+                plain
+                v-else
+                @click="followedFm(false)"
+                >关注</van-button
+              >
+            </div>
+          </template>
+        </van-cell>
+        <!-- /用户信息 -->
+
+        <!-- 分割线 -->
+        <van-divider></van-divider>
+        <!-- /分割线 -->
+
+        <!-- 文章内容 -->
+        <div class="art-content" v-html="artObj.content"></div>
+        <!-- /文章内容 -->
+
+        <!-- 分割线 -->
+        <van-divider>END</van-divider>
+        <!-- /分割线 -->
+
+        <!-- 点赞 -->
+        <!-- attitude：-1：无态度，0：不喜欢，1：点赞 -->
+        <div class="like-box">
+          <van-button
+            icon="good-job"
+            type="danger"
+            size="small"
+            v-if="artObj.attitude === 1"
+            @click="loveFn(true)"
+            >已点赞</van-button
+          >
+          <van-button
+            icon="good-job-o"
+            type="danger"
+            size="small"
+            plain
+            v-else
+            @click="loveFn(false)"
+            >点赞</van-button
+          >
+        </div>
+        <!-- /点赞 -->
       </div>
-      <!-- /点赞 -->
-    </div>
-    <!-- /文章信息区域 -->
+      <!-- /文章信息区域 -->
 
-    <!-- 文章评论 -->
-    <div>
-      <CommentList :artObj="artObj"></CommentList>
+      <!-- 文章评论 -->
+      <div>
+        <CommentList :artObj="artObj"></CommentList>
+      </div>
+      <!-- /文章评论 -->
     </div>
-    <!-- /文章评论 -->
   </div>
 </template>
 
@@ -205,5 +213,11 @@ export default {
 .like-box {
   display: flex;
   justify-content: center;
+}
+
+// 加载中的样式
+.van-loading {
+  text-align: center;
+  padding-top: 50px;
 }
 </style>

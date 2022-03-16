@@ -28,7 +28,8 @@ import {
   Tag,
   CellGroup,
   Dialog,
-  DatetimePicker
+  DatetimePicker,
+  Loading
 } from 'vant'
 
 Vue.use(NavBar)
@@ -55,6 +56,7 @@ Vue.use(Tag)
 Vue.use(CellGroup)
 Vue.use(Dialog)
 Vue.use(DatetimePicker)
+Vue.use(Loading)
 
 Vue.config.productionTip = false
 
