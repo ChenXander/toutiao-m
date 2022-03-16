@@ -8,19 +8,20 @@
           <!-- 标题 -->
           <span>{{ artItem.title }}</span>
           <!-- 单图 -->
-          <!-- <img
+          <img
             class="thumb"
             v-if="artItem.cover.type === 1"
-            :src="artItem.cover.images[0]"
+            v-lazy="artItem.cover.images[0]"
             alt=""
-          /> -->
-          <van-image
+          />
+
+          <!-- <van-image
             class="thumb"
             v-if="artItem.cover.type === 1"
             :src="artItem.cover.images[0]"
           >
             <template v-slot:error>图片走丢了</template>
-          </van-image>
+          </van-image> -->
         </div>
         <!-- 多图 -->
         <div class="thumb-box" v-if="artItem.cover.type > 1">
@@ -28,7 +29,7 @@
             class="thumb"
             v-for="(imgUrl, index) in artItem.cover.images"
             :key="index"
-            :src="imgUrl"
+            v-lazy="imgUrl"
             alt=""
           /> -->
           <van-image
@@ -36,6 +37,7 @@
             v-for="(imgUrl, index) in artItem.cover.images"
             :key="index"
             :src="imgUrl"
+            lazy-load
           >
             <template v-slot:error>图片走丢了</template>
           </van-image>
