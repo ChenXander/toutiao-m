@@ -25,7 +25,14 @@ const routes = [
   {
     path: '/login',
     component: () =>
-      import(/* webpackChunkName: "Login" */ '@/views/Login')
+      import(/* webpackChunkName: "Login" */ '@/views/Login'),
+    beforeEnter(to, from, next) {
+      if (getToken()?.length > 0) {
+        next(false)
+      } else {
+        next() // 否则放行
+      }
+    }
   },
   {
     path: '/layout',
@@ -79,13 +86,13 @@ const router = new VueRouter({
 
 // 全局前置守卫(在路由真正跳转之前，执行次函数)
 // 此函数可以决定路由是否跳转/取消/强制中断切换到别的路由
-router.beforeEach((to, from, next) => {
-  // 如果已经登录，不允许切换到登录页面
-  if (getToken()?.length > 0 && to.path === '/login') {
-    next(false)
-  } else {
-    next() // 否则放行
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   // 如果已经登录，不允许切换到登录页面
+//   if (getToken()?.length > 0 && to.path === '/login') {
+//     next(false)
+//   } else {
+//     next() // 否则放行
+//   }
+// })
 
 export default router
