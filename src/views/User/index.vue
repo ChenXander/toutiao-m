@@ -35,9 +35,9 @@
 
     <!-- 操作面板 -->
     <van-cell-group class="action-card">
-      <van-cell icon="edit" title="编辑资料" is-link />
+      <van-cell icon="edit" title="编辑资料" is-link to="/user_edit" />
       <van-cell icon="chat-o" title="小思同学" is-link />
-      <van-cell icon="warning-o" title="退出登录" is-link />
+      <van-cell icon="warning-o" title="退出登录" is-link @click="quitFn" />
     </van-cell-group>
     <!-- /操作面板 -->
   </div>
@@ -45,6 +45,8 @@
 
 <script>
 import { userAPI } from '@/api'
+import { Dialog } from 'vant'
+import { removeToken } from '@/utils/token.js'
 
 export default {
   name: '',
@@ -58,7 +60,24 @@ export default {
     const res = await userAPI()
     this.userObj = res.data.data
   },
-  methods: {}
+  methods: {
+    quitFn() {
+      Dialog.confirm({
+        title: '是否退出登录',
+        message: '确定要退出登录吗，未保存的操作将不会留存'
+      })
+        .then(() => {
+          // 用户点击确认选项-> 内部resolve触发then
+          // 主动退出，清空token，强制replace切换登录页
+          // 被动退出，把token传给后台，后台返回401，响应拦截器发现401状态证明身份过期，强制进登录页
+          removeToken()
+          this.$router.replace('/login')
+        })
+        .catch(() => {
+          // 用户点击取消选项-> 内部reject触发catch
+        })
+    }
+  }
 }
 </script>
 

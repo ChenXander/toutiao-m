@@ -198,3 +198,33 @@ export const userAPI = () => axios({
   url: '/v1_0/user',
   method: 'GET'
 })
+
+// 编辑头像
+export const updateUserPhotoAPI = (fd) => axios({
+  url: '/v1_0/user/photo',
+  method: 'PATCH',
+  data: fd // fd外面一会传进来的new FormData() 表单对象
+})
+
+// 更新用户基本资料
+export const updateUserProfileAPI = (dataObj) => {
+  // 判断是否携带某个参数
+  const obj = {
+    name: '',
+    gender: 0,
+    birthday: '',
+    intro: ''
+  }
+  for (const prop in obj) {
+    if (dataObj[prop] === undefined) {
+      delete obj[prop]
+    } else {
+      obj[prop] = dataObj[prop]
+    }
+  }
+  return axios({
+    url: '/v1_0/user/profile',
+    method: 'PATCH',
+    data: obj
+  })
+}
