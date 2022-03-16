@@ -26,11 +26,7 @@
         <!-- 右侧是当前用户 -->
         <div class="chat-item right" v-else>
           <div class="chat-pao">{{ obj.msg }}</div>
-          <van-image
-            fit="cover"
-            round
-            src="https://img01.yzcdn.cn/vant/cat.jpeg"
-          />
+          <van-image fit="cover" round :src="$store.state.userPhoto" />
         </div>
         <!-- /右侧是当前用户 -->
       </div>
@@ -41,7 +37,7 @@
     <div class="reply-container van-hairline--top">
       <van-field v-model="word" placeholder="说点什么">
         <template #button>
-          <span style="font-size: 12px; color: #999">提交</span>
+          <span style="font-size: 12px; color: #999" @click="sendFn">提交</span>
         </template>
       </van-field>
     </div>
@@ -50,6 +46,9 @@
 </template>
 
 <script>
+import { io } from 'socket.io-client'
+import { getToken } from '@/utils/token.js'
+
 export default {
   name: '',
   components: {},
@@ -60,12 +59,78 @@ export default {
       list: [
         // 根据name判断消息是左侧还是右侧
         { name: 'xs', msg: 'hi，你好！我是小思' },
+        { name: 'me', msg: '我是张三' },
+        { name: 'xs', msg: 'hi，你好！我是小思' },
+        { name: 'me', msg: '我是张三' },
+        { name: 'xs', msg: 'hi，你好！我是小思' },
+        { name: 'me', msg: '我是张三' },
+        { name: 'xs', msg: 'hi，你好！我是小思' },
         { name: 'me', msg: '我是张三' }
-      ]
+      ],
+      socket: null // 客户端和服务器建立链接的socket对象
     }
   },
-  created() {},
-  methods: {}
+  created() {
+    this.socket = io('http://toutiao.itheima.net', {
+      query: {
+        token: getToken()
+      },
+      transports: ['websocket']
+    })
+
+    // 测试建立连接
+    this.socket.on('connect', () => {
+      console.log('建立连接成功')
+    })
+
+    // 接收后端传回来的消息
+    this.socket.on('message', (obj) => {
+      this.list.push({
+        name: 'xs',
+        msg: obj.msg
+      })
+
+      // 最后一条聊天消息滚动到屏幕范围
+      // 数据变化，DOM更新是异步的，所以获取的是最后一条div
+      this.$nextTick(() => {
+        const theDiv = document.querySelector('.chat-list>div:last-child')
+        theDiv.scrollIntoView({
+          behavior: 'smooth'
+        })
+      })
+    })
+  },
+  methods: {
+    // 发送点击事件
+    sendFn() {
+      if (this.word.trim().length === 0) return
+      // 用socket链接对象.emit('后端接收消息的事件名', 值)
+      this.socket.emit('message', {
+        msg: this.word,
+        timestamp: Date.now()
+      })
+
+      // 把消息显示到页面
+      this.list.push({
+        msg: this.word,
+        name: 'me'
+      })
+
+      this.$nextTick(() => {
+        const theDiv = document.querySelector('.chat-list>div:last-child')
+        theDiv.scrollIntoView({
+          behavior: 'smooth'
+        })
+      })
+
+      // 清空输入框
+      this.word = ''
+    },
+    destroyed() {
+      this.socket.close()
+      this.socket = null
+    }
+  }
 }
 </script>
 
@@ -93,7 +158,7 @@ export default {
         vertical-align: top;
         display: inline-block;
         min-width: 40px;
-        max-width: 70px;
+        max-width: 70%;
         min-height: 40px;
         line-height: 38px;
         border: 0.5px solid #c2d9ea;

@@ -6,7 +6,7 @@
       <van-cell>
         <!-- 使用title插槽自定义标题 -->
         <template #icon>
-          <img :src="userObj.photo" alt="" class="avatar" />
+          <img :src="$store.state.userPhoto" alt="" class="avatar" />
         </template>
         <template #title>
           <span class="username">{{ userObj.name }}</span>
@@ -47,6 +47,7 @@
 import { userAPI } from '@/api'
 import { Dialog } from 'vant'
 import { removeToken } from '@/utils/token.js'
+import { mapMutations } from 'vuex'
 
 export default {
   name: '',
@@ -59,8 +60,13 @@ export default {
   async created() {
     const res = await userAPI()
     this.userObj = res.data.data
+
+    // this.$store.commit('SET_USERPHOTO', this.userObj.photo)
+    this.SET_USERPHOTO(this.userObj.photo)
   },
   methods: {
+    ...mapMutations(['SET_USERPHOTO']),
+
     quitFn() {
       Dialog.confirm({
         title: '是否退出登录',
