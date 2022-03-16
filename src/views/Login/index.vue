@@ -74,6 +74,7 @@ export default {
         console.log(res)
         Notify({ type: 'success', message: '登录成功！！！' })
         setToken(res.data.data.token)
+        localStorage.setItem('refresh_token', res.data.data.refresh_token)
         // 跳转一定要写在最后，最后执行
         // this.$router.push()压栈(会产生历史记录。可以回退)，this.$router.replace()替换(不会产生历史记录)
         this.$router.replace({

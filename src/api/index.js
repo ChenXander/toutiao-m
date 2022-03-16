@@ -173,6 +173,17 @@ export const loginAPI = ({ mobile, code }) => axios({
   }
 })
 
+// 刷新用户token
+export const getNewTokenAPI = () => axios({
+  url: '/v1_0/authorizations',
+  method: 'PUT',
+  headers: {
+    // 请求拦截器统一携带的token，而这次请求携带的是refresh_tokne
+    // 所以在axios请求拦截器里判断是为了这种情况准备
+    Authorization: 'Bearer ' + localStorage.getItem('refresh_token')
+  }
+})
+
 // 关注用户
 export const userFollowedAPI = ({ userId }) => axios({
   url: '/v1_0/user/followings',

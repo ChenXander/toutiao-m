@@ -28,7 +28,7 @@ const routes = [
       import(/* webpackChunkName: "Login" */ '@/views/Login'),
     beforeEnter(to, from, next) {
       if (getToken()?.length > 0) {
-        next(false)
+        next('/layout/home')
       } else {
         next() // 否则放行
       }
@@ -89,7 +89,7 @@ const router = new VueRouter({
 // router.beforeEach((to, from, next) => {
 //   // 如果已经登录，不允许切换到登录页面
 //   if (getToken()?.length > 0 && to.path === '/login') {
-//     next(false)
+//      next('/layout/home')
 //   } else {
 //     next() // 否则放行
 //   }
