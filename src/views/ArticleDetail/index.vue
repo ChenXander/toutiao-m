@@ -103,7 +103,7 @@ import { timeAgo } from '@/utils/date.js'
 import CommentList from './CommentList.vue'
 
 export default {
-  name: '',
+  name: 'ArticleDetail',
   components: { CommentList },
   data() {
     return {

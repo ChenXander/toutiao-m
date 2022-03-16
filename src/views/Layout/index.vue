@@ -2,7 +2,9 @@
   <div>
     <div class="home_container">
       <!-- 二级路由 -->
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
       <!-- /二级路由 -->
     </div>
 

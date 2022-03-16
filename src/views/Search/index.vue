@@ -64,7 +64,7 @@
 import { suggestListAPI } from '@/api/index.js'
 
 export default {
-  name: '',
+  name: 'Search',
   components: {},
   data() {
     return {
