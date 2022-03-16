@@ -2,8 +2,8 @@
 import theAxios from 'axios'
 import router from '@/router'
 import { Notify } from 'vant'
-import { getToken, removeToken, setToken } from '@/utils/token.js'
-import { getNewTokenAPI } from '@/api'
+import { getToken, removeToken } from '@/utils/token.js' // setToken
+// import { getNewTokenAPI } from '@/api'
 
 const axios = theAxios.create({
   baseURL: 'http://toutiao.itheima.net/', // 接口的基准路径
@@ -38,17 +38,19 @@ axios.interceptors.response.use(function (response) {
     // Notify({ type: 'warning', message: '身份已过期' })
     removeToken() // 先清除token，才能让路由守卫判断失效，放行去登录页
     // 方式1：清除token，强制跳转到登录，用户有感知
-    // router.replace('/login')
+    // router.currentRoute相当于在vue文件neithis.$route -> 当前路由对象信息
+    // fullPath，路由对象里完整路由路径#后面的一切
+    router.replace(`/login?path=${router.currentRoute.fullPath}`)
 
     // 方式2：使用refresh_token换回新的token在继续使用，js代码实现，用户无感知效果好
-    const res = await getNewTokenAPI()
+    /* const res = await getNewTokenAPI()
     // 1.将新的token更新在本地
     setToken(res.data.data.token)
     // 2.更新新的token在请求头里
     error.config.headers.Authorization = `Bearer ${res.data.data.token}`
     // 3.未完成这次请求，再一次发起
     // error.config就是上一次请求的配置对象，结果要return回原本逻辑调用的地方，仍是一个promise对象
-    return axios(error.config)
+    return axios(error.config) */
   } else if (error.response.status === 500 && error.config.url === '/v1_0/authorizations' && error.config.method === 'put') {
     // 刷新的refresh_token也过期了
     localStorage.clear()
