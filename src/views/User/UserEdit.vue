@@ -81,6 +81,7 @@
 import { userProfileAPI, updateUserPhotoAPI, updateUserProfileAPI } from '@/api'
 import { Notify } from 'vant'
 import { formatDate } from '@/utils/date.js'
+import { mapMutations } from 'vuex'
 
 export default {
   name: 'UserEdit',
@@ -101,6 +102,8 @@ export default {
     this.profileObj = res.data.data
   },
   methods: {
+    ...mapMutations(['SET_USERPHOTO', 'SET_USERNAME']),
+
     // 文件选择改变事件
     async onFileChange(e) {
       if (e.target.files[0] === 0) return // 用户没有选择图片
@@ -110,6 +113,8 @@ export default {
 
       const res = await updateUserPhotoAPI(theFd)
       this.profileObj.photo = res.data.data.photo
+
+      this.SET_USERPHOTO(res.data.data.photo) // 更新成功后同步到vuex中
     },
 
     // 图片点击事件
@@ -134,6 +139,7 @@ export default {
             name: this.inputUserName
           })
           this.profileObj.name = this.inputUserName
+          this.SET_USERNAME(this.inputUserName)
           done()
         } else {
           // 没通过校验

@@ -9,7 +9,7 @@
           <img :src="$store.state.userPhoto" alt="" class="avatar" />
         </template>
         <template #title>
-          <span class="username">{{ userObj.name }}</span>
+          <span class="username">{{ $store.state.userName }}</span>
         </template>
         <template #label>
           <van-tag color="#fff" text-color="#007bff">申请认证</van-tag>
@@ -63,9 +63,10 @@ export default {
 
     // this.$store.commit('SET_USERPHOTO', this.userObj.photo)
     this.SET_USERPHOTO(this.userObj.photo)
+    this.SET_USERNAME(this.userObj.name)
   },
   methods: {
-    ...mapMutations(['SET_USERPHOTO']),
+    ...mapMutations(['SET_USERPHOTO', 'SET_USERNAME']),
 
     quitFn() {
       Dialog.confirm({
