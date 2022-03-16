@@ -186,3 +186,15 @@ export const userUnFollowedAPI = ({ userId }) => axios({
   url: `/v1_0/user/followings/${userId}`,
   method: 'DELETE'
 })
+
+// 获取用户个人资料
+export const userProfileAPI = () => axios({
+  url: '/v1_0/user/profile',
+  method: 'GET'
+})
+
+// 获取用户基本信息
+export const userAPI = () => axios({
+  url: '/v1_0/user',
+  method: 'GET'
+})
