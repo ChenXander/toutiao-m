@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import 'highlight.js/styles/default.css' // 代码高亮样式
 import 'amfe-flexible' // 移动端适配
+import directiveObj from '@/utils/directive'
 import {
   NavBar,
   Field,
@@ -63,48 +64,10 @@ Vue.use(Lazyload, {
   preLoad: 0.8, // 屏幕高度的范围百分比0-1，预加载范围
   error: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01bb495b486e18a80121ade0866d6a.gif&refer=http%3A%2F%2Fimg.zcool.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1650024283&t=88257093cb57ef6e08a779518c8c271a'
 })
-
-Vue.config.productionTip = false
-
-// 自定义指令,自动聚焦
-const directiveObj = { // 封装中间件函数插件
-  install(Vue) {
-    Vue.directive('fofo', {
-      // el代表指令所在的标签
-      // 指令所在标签被插入到真是DOM时才触发，如果标签用display:none隐藏再出现，不会触发inserted
-      inserted(el) {
-        // 指定所在van-search组件
-        // 组件根标签是div，input在内部
-        // 以上都是原生标签对象
-        if (el.nodeName === 'TEXTAREA' || el.nodeName === 'INPUT') {
-          el.focus()
-        } else {
-          // el本身不是输入框，尝试获取
-          const theInput = el.querySelector('input')
-          const theTextArea = el.querySelector('textarea')
-          if (theInput) theInput.focus()
-          if (theTextArea) theTextArea.focus()
-        }
-      },
-      update(el) { // 指令所在标签被更新时触发
-        // 指定所在van-search组件
-        // 组件根标签是div，input在内部
-        // 以上都是原生标签对象
-        if (el.nodeName === 'TEXTAREA' || el.nodeName === 'INPUT') {
-          el.focus()
-        } else {
-          // el本身不是输入框，尝试获取
-          const theInput = el.querySelector('input')
-          const theTextArea = el.querySelector('textarea')
-          if (theInput) theInput.focus()
-          if (theTextArea) theTextArea.focus()
-        }
-      }
-    })
-  }
-}
 // 执行目标对象里install方法并传入Vue类
 Vue.use(directiveObj)
+
+Vue.config.productionTip = false
 
 new Vue({
   router,
