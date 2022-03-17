@@ -42,7 +42,10 @@ const routes = [
       {
         path: 'home',
         component: () =>
-          import(/* webpackChunkName: "Home" */ '@/views/Home')
+          import(/* webpackChunkName: "Home" */ '@/views/Home'),
+        meta: {
+          scrollT: 0 // 保存首页离开时，滚动条的位置
+        }
       },
       {
         path: 'user',

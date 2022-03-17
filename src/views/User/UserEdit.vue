@@ -16,7 +16,7 @@
           <van-image
             round
             class="avatar"
-            :src="profileObj.photo"
+            :src="$store.state.userPhoto"
             @click="imageClickFn"
           />
           <!-- file文件选择框 -->
@@ -33,7 +33,7 @@
       <van-cell
         title="名称"
         is-link
-        :value="profileObj.name"
+        :value="$store.state.userName"
         @click="nameClickFn"
       />
       <van-cell
@@ -139,7 +139,7 @@ export default {
             name: this.inputUserName
           })
           this.profileObj.name = this.inputUserName
-          this.SET_USERNAME(this.inputUserName)
+          this.SET_USERNAME(this.profileObj.name)
           done()
         } else {
           // 没通过校验

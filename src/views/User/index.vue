@@ -60,7 +60,6 @@ export default {
   async created() {
     const res = await userAPI()
     this.userObj = res.data.data
-
     // this.$store.commit('SET_USERPHOTO', this.userObj.photo)
     this.SET_USERPHOTO(this.userObj.photo)
     this.SET_USERNAME(this.userObj.name)

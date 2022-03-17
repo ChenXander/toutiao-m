@@ -166,6 +166,11 @@ export default {
     // 首页-跳转搜索页
     moveSearchPageFn() {
       this.$router.push('/search')
+    },
+
+    // 屏幕滚动事件
+    scrollFn() {
+      this.$route.meta.scrollT = document.documentElement.scrollTop
     }
   },
 
@@ -194,6 +199,18 @@ export default {
           ) !== -1
       ) */
     }
+  },
+
+  // 处理页面切换后,滚动条位置保留
+  // 路由配置meta属性保存滚动条位置
+  activated() {
+    // 监测滚动条的滚动
+    window.addEventListener('scroll', this.scrollFn)
+    // 设置滚动条位置
+    document.documentElement.scrollTop = this.$route.meta.scrollT
+  },
+  deactivated() {
+    window.removeEventListener('scroll', this.scrollFn)
   }
 }
 </script>
