@@ -114,6 +114,8 @@ export default {
       this.$nextTick(() => {
         document.documentElement.scrollTop =
           this.channelScrollTObj[this.channelId]
+        // 解决不同浏览器内核滚动条获取和设置问题
+        document.body.scrollTop = this.channelScrollTObj[this.channelId]
       })
     },
 
@@ -180,10 +182,11 @@ export default {
 
     // 屏幕滚动事件
     scrollFn() {
-      this.$route.meta.scrollT = document.documentElement.scrollTop
+      this.$route.meta.scrollT =
+        document.documentElement.scrollTop || document.body.scrollTop
       // 同时保存当前频道的滚动距离
       this.channelScrollTObj[this.channelId] =
-        document.documentElement.scrollTop
+        document.documentElement.scrollTop || document.body.scrollTop
     }
   },
 
@@ -221,6 +224,7 @@ export default {
     window.addEventListener('scroll', this.scrollFn)
     // 设置滚动条位置
     document.documentElement.scrollTop = this.$route.meta.scrollT
+    document.body.scrollTop = this.$route.meta.scrollT
   },
   deactivated() {
     window.removeEventListener('scroll', this.scrollFn)

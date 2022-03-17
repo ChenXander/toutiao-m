@@ -15,5 +15,6 @@ module.exports = {
 
       }
     }
-  }
+  },
+  publicPath: './' // webpack打包的index.html引入其他资源文件以./开头
 }
