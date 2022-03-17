@@ -49,7 +49,8 @@
 <script>
 import { loginAPI } from '@/api'
 import { setToken } from '@/utils/token'
-import { Notify } from 'vant'
+// import { Notify } from 'vant'
+import Notify from '@/ui/Notify.js'
 import { setStorage } from '@/utils/storage.js'
 
 export default {

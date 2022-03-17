@@ -31,7 +31,8 @@ import {
   dislikeArticleAPI,
   reportArticleAPI
 } from '@/api/index.js'
-import { Notify } from 'vant'
+// import { Notify } from 'vant'
+import Notify from '@/ui/Notify.js'
 
 export default {
   name: '',

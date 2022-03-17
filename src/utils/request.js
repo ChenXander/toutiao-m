@@ -1,7 +1,8 @@
 // 请求模块
 import theAxios from 'axios'
 import router from '@/router'
-import { Notify } from 'vant'
+// import { Notify } from 'vant'
+import Notify from '@/ui/Notify.js'
 import { getToken, removeToken } from '@/utils/token.js' // setToken
 // import { getNewTokenAPI } from '@/api'
 

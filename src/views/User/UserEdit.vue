@@ -79,7 +79,8 @@
 
 <script>
 import { userProfileAPI, updateUserPhotoAPI, updateUserProfileAPI } from '@/api'
-import { Notify } from 'vant'
+// import { Notify } from 'vant'
+import Notify from '@/ui/Notify.js'
 import { formatDate } from '@/utils/date.js'
 import { mapMutations } from 'vuex'
 
