@@ -84,7 +84,8 @@ export default {
       userChannelList: [], // 用户频道列表
       allChannelList: [], // 所有频道列表
       articleList: [], // 文章列表
-      show: false // 频道弹出层显示与隐藏
+      show: false, // 频道弹出层显示与隐藏
+      channelScrollTObj: {} // 保存每个频道的滚动位置
     }
   },
   async created() {
@@ -105,7 +106,16 @@ export default {
   },
   methods: {
     // tab切换事件
-    async channelChangeFn() {},
+    channelChangeFn() {
+      // tab切换后设置滚动条的位置
+      // tab切换后，组件内部会把切走的容器高度设为0，滚动条因为没有高度回到了顶部
+      // 切回来的一瞬间，没有高度，滚动事件从底下上来也被触发了，所以才把数据设置为0
+      // 切换回来的瞬间，高度为0，设置的滚动位置也会无效,用nextTick延迟等到DOM更新完才执行
+      this.$nextTick(() => {
+        document.documentElement.scrollTop =
+          this.channelScrollTObj[this.channelId]
+      })
+    },
 
     // 编辑状态
     plusClickFn() {
@@ -171,6 +181,9 @@ export default {
     // 屏幕滚动事件
     scrollFn() {
       this.$route.meta.scrollT = document.documentElement.scrollTop
+      // 同时保存当前频道的滚动距离
+      this.channelScrollTObj[this.channelId] =
+        document.documentElement.scrollTop
     }
   },
 
