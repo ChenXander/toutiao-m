@@ -1,6 +1,7 @@
 // 统一封装接口方法
 // 每个方法负责请求一个url，便于统一管理
 import axios from '@/utils/request.js'
+import { getStorage } from '@/utils/storage.js'
 // 既引入也同时向外按需导出所有引入过来的方法(中转作用)
 export * from './ArticleDetail'
 export * from './Channel'
@@ -73,6 +74,6 @@ export const getNewTokenAPI = () => axios({
   headers: {
     // 请求拦截器统一携带的token，而这次请求携带的是refresh_tokne
     // 所以在axios请求拦截器里判断是为了这种情况准备
-    Authorization: 'Bearer ' + localStorage.getItem('refresh_token')
+    Authorization: 'Bearer ' + getStorage('refresh_token')
   }
 })
